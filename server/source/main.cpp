@@ -1,6 +1,7 @@
 #include <crow.h>
 #include "database/ORM.h"
 #include <crow/middlewares/cors.h>
+#include "features/visualize-graph/VisualizeGraphRoute.h"
 
 int main()
 {
@@ -23,6 +24,9 @@ int main()
     response["service"] = "Happy GR4";
     return response;
   });
+
+  // Register feature routes
+  VisualizeGraphRoute::setupRoutes(app, storage);
 
   app.port(4000).multithreaded().run();
 }
