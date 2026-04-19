@@ -1,8 +1,8 @@
 #pragma once
 
 #include <sqlite_orm/sqlite_orm.h>
-#include "../core/models/Node.h"
-#include "../core/models/Edge.h"
+#include "./models/Node.h"
+#include "./models/Edge.h"
 
 namespace sql = sqlite_orm;
 

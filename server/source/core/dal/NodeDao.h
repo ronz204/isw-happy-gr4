@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../models/Node.h"
+#include "../../database/models/Node.h"
 #include "../../database/ORM.h"
 #include <vector>
 

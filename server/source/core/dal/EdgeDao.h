@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../models/Edge.h"
+#include "../../database/models/Edge.h"
 #include "../../database/ORM.h"
 #include <vector>
 

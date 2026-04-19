@@ -1,11 +1,11 @@
 #pragma once
 
 #include <crow.h>
-#include "../../core/models/Node.h"
-#include "../../core/models/Edge.h"
-#include "../../core/enums/NodeType.h"
-#include "../../core/enums/EdgeStatus.h"
 #include <vector>
+#include "../../database/models/Node.h"
+#include "../../database/models/Edge.h"
+#include "../../database/enums/NodeType.h"
+#include "../../database/enums/EdgeStatus.h"
 
 class VisualizeGraphMapper
 {

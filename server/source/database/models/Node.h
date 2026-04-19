@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include "../enums/NodeType.h"
 
 struct Node
 {

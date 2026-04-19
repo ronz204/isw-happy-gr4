@@ -1,9 +1,9 @@
 #pragma once
 
 #include <crow.h>
+#include <memory>
 #include "VisualizeGraphHandler.h"
 #include "../../database/ORM.h"
-#include <memory>
 
 class VisualizeGraphRoute
 {

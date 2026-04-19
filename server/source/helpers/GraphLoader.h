@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../models/Node.h"
-#include "../models/Edge.h"
-#include "../models/Graph.h"
-#include "../../database/ORM.h"
+#include "./database/models/Node.h"
+#include "./database/models/Edge.h"
+#include "./database/models/Graph.h"
+#include "./database/ORM.h"
 
 class GraphLoader
 {
