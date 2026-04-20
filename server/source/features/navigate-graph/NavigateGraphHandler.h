@@ -5,11 +5,10 @@
 #include "../../database/ORM.h"
 #include "../../helpers/GraphLoader.h"
 #include "../../core/dal/GraphDao.h"
-#include "../../core/profiles/ProfileContext.h"
+#include "../../core/profiles/ProfileFactory.h"
 #include "../../core/strategies/DFSStrategy.h"
 #include "../../core/strategies/BFSStrategy.h"
 #include "../../core/strategies/DijkstraStrategy.h"
-#include "../../database/enums/UserProfile.h"
 #include "NavigateGraphMapper.h"
 
 class NavigateGraphHandler
@@ -37,9 +36,8 @@ public:
     // Load graph from database
     Graph graph = GraphLoader::loadFromDB(storage);
 
-    // Create profile context
-    UserProfile profile = userProfileFromString(userProfileStr);
-    ProfileContext context(profile);
+    // Create profile instance
+    auto profile = ProfileFactory::createProfile(userProfileStr);
 
     // Select search strategy
     std::unique_ptr<SearchStrategy> strategy;
@@ -62,7 +60,7 @@ public:
 
     // Use GraphDao to find path
     GraphDao graphDao(graph);
-    PathResult result = graphDao.findPath(startNodeId, endNodeId, *strategy, context);
+    PathResult result = graphDao.findPath(startNodeId, endNodeId, *strategy, *profile);
 
     // Return mapped response with node details
     return NavigateGraphMapper::toResponse(result, graph);

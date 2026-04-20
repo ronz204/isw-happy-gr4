@@ -27,7 +27,7 @@ public:
   TraversalResult traverse(
       const Graph &graph,
       int startNodeId,
-      const ProfileContext &context) const override
+      const Profile &profile) const override
   {
     auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -73,10 +73,10 @@ public:
           continue;
 
         const Edge *edge = graph.getEdge(neighbor.edgeId);
-        if (!edge || !context.isEdgeAccessible(*edge))
+        if (!edge || !profile.isEdgeAccessible(*edge))
           continue;
 
-        double effectiveWeight = context.calculateEffectiveWeight(*edge);
+        double effectiveWeight = profile.calculateEffectiveWeight(*edge);
         double newRealDistance = realDistances[current.nodeId] + effectiveWeight;
 
         // Apply landmark bonus for priority calculation (NewStudent profile)
@@ -84,7 +84,7 @@ public:
         const Node *neighborNode = graph.getNode(neighbor.toNodeId);
         if (neighborNode)
         {
-          newPriorityDistance += context.getLandmarkBonus(*neighborNode);
+          newPriorityDistance += profile.getLandmarkBonus(*neighborNode);
         }
 
         if (newPriorityDistance < priorityDistances[neighbor.toNodeId])
@@ -110,7 +110,7 @@ public:
       const Graph &graph,
       int startNodeId,
       int endNodeId,
-      const ProfileContext &context) const override
+      const Profile &profile) const override
   {
     auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -165,10 +165,10 @@ public:
           continue;
 
         const Edge *edge = graph.getEdge(neighbor.edgeId);
-        if (!edge || !context.isEdgeAccessible(*edge))
+        if (!edge || !profile.isEdgeAccessible(*edge))
           continue;
 
-        double effectiveWeight = context.calculateEffectiveWeight(*edge);
+        double effectiveWeight = profile.calculateEffectiveWeight(*edge);
         double newRealDistance = realDistances[current.nodeId] + effectiveWeight;
 
         // Apply landmark bonus for priority calculation (NewStudent profile)
@@ -177,7 +177,7 @@ public:
         const Node *neighborNode = graph.getNode(neighbor.toNodeId);
         if (neighborNode)
         {
-          newPriorityDistance += context.getLandmarkBonus(*neighborNode);
+          newPriorityDistance += profile.getLandmarkBonus(*neighborNode);
         }
 
         if (newPriorityDistance < priorityDistances[neighbor.toNodeId])

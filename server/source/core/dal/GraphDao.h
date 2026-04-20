@@ -4,7 +4,7 @@
 #include "../../database/enums/EdgeStatus.h"
 #include "../strategies/SearchStrategy.h"
 #include "../strategies/DFSStrategy.h"
-#include "../profiles/ProfileContext.h"
+#include "../profiles/Profile.h"
 #include "../response/TraversalResult.h"
 #include "../response/PathResult.h"
 #include <memory>
@@ -65,7 +65,7 @@ public:
   }
 
   // Check if path exists between two nodes
-  bool hasPath(int startId, int endId, const ProfileContext &context) const
+  bool hasPath(int startId, int endId, const Profile &profile) const
   {
     if (startId == endId)
       return true;
@@ -93,7 +93,7 @@ public:
         if (visited.find(neighbor.toNodeId) == visited.end())
         {
           const Edge *edge = graph.getEdge(neighbor.edgeId);
-          if (!edge || !context.isEdgeAccessible(*edge))
+          if (!edge || !profile.isEdgeAccessible(*edge))
             continue;
 
           visited.insert(neighbor.toNodeId);
@@ -109,9 +109,9 @@ public:
   TraversalResult performTraversal(
       int startNodeId,
       const SearchStrategy &strategy,
-      const ProfileContext &context) const
+      const Profile &profile) const
   {
-    return strategy.traverse(graph, startNodeId, context);
+    return strategy.traverse(graph, startNodeId, profile);
   }
 
   // Find path using a strategy
@@ -119,9 +119,9 @@ public:
       int startNodeId,
       int endNodeId,
       const SearchStrategy &strategy,
-      const ProfileContext &context) const
+      const Profile &profile) const
   {
-    return strategy.findPath(graph, startNodeId, endNodeId, context);
+    return strategy.findPath(graph, startNodeId, endNodeId, profile);
   }
 
   // Get node count

@@ -65,14 +65,14 @@ Content-Type: application/json
 
 ###
 
-### 6. Navigate: With Crutches (Penalizes stairs)
+### 6. Navigate: With Wheelchair (Cannot use stairs)
 POST {{baseUrl}}/api/navigate
 Content-Type: application/json
 
 {
   "startNodeId": 5,
   "endNodeId": 25,
-  "userProfile": "Crutches",
+  "userProfile": "Wheelchair",
   "algorithm": "BFS"
 }
 
@@ -137,7 +137,7 @@ Content-Type: application/json
 {
   "startNodeId": 5,
   "endNodeId": 10,
-  "userProfile": "Staff",
+  "userProfile": "Regular",
   "algorithm": "BFS"
 }
 
@@ -156,14 +156,14 @@ Content-Type: application/json
 
 ###
 
-### 13. Navigate: Limited Mobility (penalizes slopes and stairs)
+### 13. Navigate: With Wheelchair (cannot use stairs)
 POST {{baseUrl}}/api/navigate
 Content-Type: application/json
 
 {
   "startNodeId": 1,
   "endNodeId": 19,
-  "userProfile": "LimitedMobility",
+  "userProfile": "Wheelchair",
   "algorithm": "BFS"
 }
 
@@ -182,14 +182,14 @@ Content-Type: application/json
 
 ###
 
-### 15. Navigate: Visitor profile (same as regular)
+### 15. Navigate: Same as regular user
 POST {{baseUrl}}/api/navigate
 Content-Type: application/json
 
 {
   "startNodeId": 1,
   "endNodeId": 11,
-  "userProfile": "Visitor",
+  "userProfile": "Regular",
   "algorithm": "BFS"
 }
 

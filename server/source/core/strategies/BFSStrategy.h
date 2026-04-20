@@ -12,7 +12,7 @@ public:
   TraversalResult traverse(
       const Graph &graph,
       int startNodeId,
-      const ProfileContext &context) const override
+      const Profile &profile) const override
   {
     auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -42,10 +42,10 @@ public:
         if (visited.find(neighbor.toNodeId) == visited.end())
         {
           const Edge *edge = graph.getEdge(neighbor.edgeId);
-          if (!edge || !context.isEdgeAccessible(*edge))
+          if (!edge || !profile.isEdgeAccessible(*edge))
             continue;
 
-          double effectiveWeight = context.calculateEffectiveWeight(*edge);
+          double effectiveWeight = profile.calculateEffectiveWeight(*edge);
           visited.insert(neighbor.toNodeId);
           queue.push({neighbor.toNodeId, currentDistance + effectiveWeight});
         }
@@ -66,7 +66,7 @@ public:
       const Graph &graph,
       int startNodeId,
       int endNodeId,
-      const ProfileContext &context) const override
+      const Profile &profile) const override
   {
     auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -107,10 +107,10 @@ public:
         if (visited.find(neighbor.toNodeId) == visited.end())
         {
           const Edge *edge = graph.getEdge(neighbor.edgeId);
-          if (!edge || !context.isEdgeAccessible(*edge))
+          if (!edge || !profile.isEdgeAccessible(*edge))
             continue;
 
-          double effectiveWeight = context.calculateEffectiveWeight(*edge);
+          double effectiveWeight = profile.calculateEffectiveWeight(*edge);
           visited.insert(neighbor.toNodeId);
           parent[neighbor.toNodeId] = currentNode;
           distances[neighbor.toNodeId] = distances[currentNode] + effectiveWeight;

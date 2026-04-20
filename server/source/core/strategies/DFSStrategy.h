@@ -14,7 +14,7 @@ private:
       std::vector<int> &visitedNodes,
       std::vector<double> &cumulativeDistances,
       double currentDistance,
-      const ProfileContext &context) const
+      const Profile &profile) const
   {
     visited.insert(currentNode);
     visitedNodes.push_back(currentNode);
@@ -29,12 +29,12 @@ private:
       if (visited.find(neighbor.toNodeId) == visited.end())
       {
         const Edge *edge = graph.getEdge(neighbor.edgeId);
-        if (!edge || !context.isEdgeAccessible(*edge))
+        if (!edge || !profile.isEdgeAccessible(*edge))
           continue;
 
-        double effectiveWeight = context.calculateEffectiveWeight(*edge);
+        double effectiveWeight = profile.calculateEffectiveWeight(*edge);
         dfsRecursive(graph, neighbor.toNodeId, visited, visitedNodes,
-                     cumulativeDistances, currentDistance + effectiveWeight, context);
+                     cumulativeDistances, currentDistance + effectiveWeight, profile);
       }
     }
   }
@@ -47,7 +47,7 @@ private:
       std::vector<int> &path,
       std::vector<double> &segmentDistances,
       double &totalDistance,
-      const ProfileContext &context) const
+      const Profile &profile) const
   {
     visited.insert(current);
     path.push_back(current);
@@ -70,15 +70,15 @@ private:
       if (visited.find(neighbor.toNodeId) == visited.end())
       {
         const Edge *edge = graph.getEdge(neighbor.edgeId);
-        if (!edge || !context.isEdgeAccessible(*edge))
+        if (!edge || !profile.isEdgeAccessible(*edge))
           continue;
 
-        double effectiveWeight = context.calculateEffectiveWeight(*edge);
+        double effectiveWeight = profile.calculateEffectiveWeight(*edge);
         segmentDistances.push_back(effectiveWeight);
         totalDistance += effectiveWeight;
 
         if (dfsPathRecursive(graph, neighbor.toNodeId, destination, visited,
-                             path, segmentDistances, totalDistance, context))
+                             path, segmentDistances, totalDistance, profile))
         {
           return true;
         }
@@ -98,7 +98,7 @@ public:
   TraversalResult traverse(
       const Graph &graph,
       int startNodeId,
-      const ProfileContext &context) const override
+      const Profile &profile) const override
   {
     auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -107,7 +107,7 @@ public:
 
     std::unordered_set<int> visited;
     dfsRecursive(graph, startNodeId, visited, result.visitedNodes,
-                 result.cumulativeDistances, 0.0, context);
+                 result.cumulativeDistances, 0.0, profile);
 
     result.nodesVisited = result.visitedNodes.size();
 
@@ -123,7 +123,7 @@ public:
       const Graph &graph,
       int startNodeId,
       int endNodeId,
-      const ProfileContext &context) const override
+      const Profile &profile) const override
   {
     auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -134,7 +134,7 @@ public:
     std::unordered_set<int> visited;
     result.pathExists = dfsPathRecursive(graph, startNodeId, endNodeId, visited,
                                          result.path, result.segmentDistances,
-                                         result.totalDistance, context);
+                                         result.totalDistance, profile);
 
     auto endTime = std::chrono::high_resolution_clock::now();
     result.executionTimeMicros = std::chrono::duration_cast<std::chrono::microseconds>(
