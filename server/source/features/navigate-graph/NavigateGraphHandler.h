@@ -8,6 +8,7 @@
 #include "../../core/profiles/ProfileContext.h"
 #include "../../core/strategies/DFSStrategy.h"
 #include "../../core/strategies/BFSStrategy.h"
+#include "../../core/strategies/DijkstraStrategy.h"
 #include "../../database/enums/UserProfile.h"
 #include "NavigateGraphMapper.h"
 
@@ -50,9 +51,13 @@ public:
     {
       strategy = std::make_unique<BFSStrategy>();
     }
+    else if (algorithmStr == "Dijkstra")
+    {
+      strategy = std::make_unique<DijkstraStrategy>();
+    }
     else
     {
-      return crow::json::wvalue{{"error", "Invalid algorithm. Use 'DFS' or 'BFS'"}};
+      return crow::json::wvalue{{"error", "Invalid algorithm. Use 'DFS', 'BFS', or 'Dijkstra'"}};
     }
 
     // Use GraphDao to find path
