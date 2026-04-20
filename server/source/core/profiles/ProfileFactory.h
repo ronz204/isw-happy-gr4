@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Profile.h"
-#include "RegularProfile.h"
-#include "NewStudentProfile.h"
-#include "WheelchairProfile.h"
+#include "students/RegularStudentProfile.h"
+#include "students/NewStudentProfile.h"
+#include "students/WheelchairStudentProfile.h"
 #include "../../database/enums/ProfileType.h"
 #include <memory>
 #include <stdexcept>
@@ -17,11 +17,11 @@ public:
     switch (type)
     {
     case ProfileType::Regular:
-      return std::make_unique<RegularProfile>();
+      return std::make_unique<RegularStudentProfile>();
     case ProfileType::NewStudent:
       return std::make_unique<NewStudentProfile>();
     case ProfileType::Wheelchair:
-      return std::make_unique<WheelchairProfile>();
+      return std::make_unique<WheelchairStudentProfile>();
     default:
       throw std::invalid_argument("Invalid ProfileType");
     }

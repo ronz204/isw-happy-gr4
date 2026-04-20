@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Profile.h"
+#include "../Profile.h"
 #include <cmath>
 #include <limits>
 
-class WheelchairProfile : public Profile
+class WheelchairStudentProfile : public Profile
 {
 public:
   // Apply wheelchair-specific weight modifiers

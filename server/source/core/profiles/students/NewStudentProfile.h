@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Profile.h"
+#include "../Profile.h"
 
 class NewStudentProfile : public Profile
 {

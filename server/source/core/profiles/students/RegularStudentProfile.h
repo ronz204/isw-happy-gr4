@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Profile.h"
+#include "../Profile.h"
 
-class RegularProfile : public Profile
+class RegularStudentProfile : public Profile
 {
 public:
   // Regular profile uses base weight without modifications
