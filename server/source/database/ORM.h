@@ -18,7 +18,9 @@ inline auto initStorage(const std::string &path)
           sql::make_column("py", &Node::py, sql::not_null()),
           sql::make_column("code", &Node::code, sql::not_null()),
           sql::make_column("label", &Node::label, sql::not_null()),
-          sql::make_column("type", &Node::type, sql::not_null())),
+          sql::make_column("type", &Node::type, sql::not_null()),
+          sql::make_column("isLandmark", &Node::isLandmark, sql::default_value(false)),
+          sql::make_column("landmarkLvl", &Node::landmarkLvl, sql::default_value(0))),
       sql::make_table(
           "edges",
           sql::make_column("id", &Edge::id, sql::primary_key().autoincrement()),
@@ -26,6 +28,8 @@ inline auto initStorage(const std::string &path)
           sql::make_column("fromNodeId", &Edge::fromNodeId, sql::not_null()),
           sql::make_column("toNodeId", &Edge::toNodeId, sql::not_null()),
           sql::make_column("status", &Edge::status, sql::not_null()),
+          sql::make_column("pathType", &Edge::pathType, sql::not_null()),
+          sql::make_column("slope", &Edge::slope, sql::default_value(0.0)),
           sql::foreign_key(&Edge::fromNodeId).references(&Node::id),
           sql::foreign_key(&Edge::toNodeId).references(&Node::id)));
 }
