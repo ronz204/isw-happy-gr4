@@ -247,3 +247,152 @@ Content-Type: application/json
 }
 
 ###
+
+### ============================================
+### DIJKSTRA TESTS - Shows profile differences
+### ============================================
+
+### 19a. REGULAR STUDENT: Entrance → Aula 103 (Dijkstra)
+### Expected: Takes SHORTEST distance path
+### Should avoid landmarks if they add distance
+POST {{baseUrl}}/api/navigate
+Content-Type: application/json
+
+{
+  "startNodeId": 1,
+  "endNodeId": 19,
+  "userProfile": "Regular",
+  "algorithm": "Dijkstra"
+}
+
+###
+
+### 19b. NEW STUDENT: Entrance → Aula 103 (Dijkstra)
+### Expected: Prefers path through LANDMARKS (Cafeteria★, Library★)
+### May take longer route but passes through familiar reference points
+### Landmark bonuses make landmark paths more attractive
+POST {{baseUrl}}/api/navigate
+Content-Type: application/json
+
+{
+  "startNodeId": 1,
+  "endNodeId": 19,
+  "userProfile": "NewStudent",
+  "algorithm": "Dijkstra"
+}
+
+###
+
+### 20a. REGULAR: Parqueo → Aula 201 (Dijkstra)
+### Expected: Direct shortest path
+POST {{baseUrl}}/api/navigate
+Content-Type: application/json
+
+{
+  "startNodeId": 2,
+  "endNodeId": 26,
+  "userProfile": "Regular",
+  "algorithm": "Dijkstra"
+}
+
+###
+
+### 20b. NEW STUDENT: Parqueo → Aula 201 (Dijkstra)
+### Expected: Route through landmarks (Entrance★, Cafeteria★, Library★)
+### Will prefer passing through known reference points
+POST {{baseUrl}}/api/navigate
+Content-Type: application/json
+
+{
+  "startNodeId": 2,
+  "endNodeId": 26,
+  "userProfile": "NewStudent",
+  "algorithm": "Dijkstra"
+}
+
+###
+
+### 21a. REGULAR: Junction → Admin Offices (Dijkstra)
+### Shortest path only
+POST {{baseUrl}}/api/navigate
+Content-Type: application/json
+
+{
+  "startNodeId": 3,
+  "endNodeId": 10,
+  "userProfile": "Regular",
+  "algorithm": "Dijkstra"
+}
+
+###
+
+### 21b. NEW STUDENT: Junction → Admin Offices (Dijkstra)
+### May route through Cafeteria landmark first
+POST {{baseUrl}}/api/navigate
+Content-Type: application/json
+
+{
+  "startNodeId": 3,
+  "endNodeId": 10,
+  "userProfile": "NewStudent",
+  "algorithm": "Dijkstra"
+}
+
+###
+
+### 22. WHEELCHAIR + DIJKSTRA: Multi-floor navigation
+### Must avoid stairs, will use elevator/ramp
+### Combines accessibility with optimal path finding
+POST {{baseUrl}}/api/navigate
+Content-Type: application/json
+
+{
+  "startNodeId": 1,
+  "endNodeId": 25,
+  "userProfile": "Wheelchair",
+  "algorithm": "Dijkstra"
+}
+
+###
+
+### 23. COMPARISON: Same route, three profiles
+### Route: Entrance → Auditorio (crosses 2 floors)
+
+### 23a. Regular - Shortest
+POST {{baseUrl}}/api/navigate
+Content-Type: application/json
+
+{
+  "startNodeId": 1,
+  "endNodeId": 25,
+  "userProfile": "Regular",
+  "algorithm": "Dijkstra"
+}
+
+###
+
+### 23b. NewStudent - Through landmarks
+POST {{baseUrl}}/api/navigate
+Content-Type: application/json
+
+{
+  "startNodeId": 1,
+  "endNodeId": 25,
+  "userProfile": "NewStudent",
+  "algorithm": "Dijkstra"
+}
+
+###
+
+### 23c. Wheelchair - Accessible route
+POST {{baseUrl}}/api/navigate
+Content-Type: application/json
+
+{
+  "startNodeId": 1,
+  "endNodeId": 25,
+  "userProfile": "Wheelchair",
+  "algorithm": "Dijkstra"
+}
+
+###
