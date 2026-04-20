@@ -6,7 +6,7 @@
 #include "../../database/models/Edge.h"
 #include "../../database/enums/NodeType.h"
 #include "../../database/enums/EdgeStatus.h"
-#include "../../database/enums/PathType.h"
+#include "../../database/enums/EdgeType.h"
 
 class VisualizeGraphMapper
 {
@@ -39,7 +39,7 @@ public:
     {
       const auto &edge = edges[i];
       edgeList[i]["id"] = edge.id;
-      edgeList[i]["type"] = toString(static_cast<PathType>(edge.type));
+      edgeList[i]["type"] = toString(static_cast<EdgeType>(edge.type));
       edgeList[i]["status"] = toString(static_cast<EdgeStatus>(edge.status));
       edgeList[i]["weight"] = edge.weight;
       edgeList[i]["fromNodeId"] = edge.fromNodeId;

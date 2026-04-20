@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../database/enums/ProfileType.h"
-#include "../../database/enums/PathType.h"
+#include "../../database/enums/EdgeType.h"
 #include "../../database/enums/EdgeStatus.h"
 #include "../../database/models/Edge.h"
 #include "../../database/models/Node.h"
