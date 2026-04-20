@@ -62,7 +62,7 @@ public:
       }
       catch (const std::invalid_argument &)
       {
-        return {false, "Invalid edge status. Valid values: Open, Closed, Blocked, Maintenance, WeatherClosed, EventClosed"};
+        return {false, "Invalid edge status. Valid values: Open, Closed"};
       }
     }
 
