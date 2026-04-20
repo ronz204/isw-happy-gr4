@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../database/models/Graph.h"
+#include "../../database/enums/EdgeStatus.h"
 #include "../strategies/SearchStrategy.h"
 #include "../strategies/DFSStrategy.h"
 #include "../profiles/ProfileContext.h"
@@ -15,6 +16,16 @@ class GraphDao
 private:
   const Graph &graph;
 
+  // Check if edge is open (not blocked/closed)
+  bool isEdgeOpen(const Edge *edge) const
+  {
+    if (!edge)
+      return false;
+    
+    EdgeStatus status = static_cast<EdgeStatus>(edge->status);
+    return status == EdgeStatus::Open;
+  }
+
   void dfsConnectivityHelper(int node, std::unordered_set<int> &visited) const
   {
     visited.insert(node);
@@ -27,6 +38,11 @@ private:
     {
       if (visited.find(neighbor.toNodeId) == visited.end())
       {
+        // Only traverse through open edges
+        const Edge *edge = graph.getEdge(neighbor.edgeId);
+        if (!isEdgeOpen(edge))
+          continue;
+
         dfsConnectivityHelper(neighbor.toNodeId, visited);
       }
     }
