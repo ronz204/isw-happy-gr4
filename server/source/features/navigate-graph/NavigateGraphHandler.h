@@ -59,7 +59,7 @@ public:
     GraphDao graphDao(graph);
     PathResult result = graphDao.findPath(startNodeId, endNodeId, *strategy, context);
 
-    // Return mapped response
-    return NavigateGraphMapper::toResponse(result);
+    // Return mapped response with node details
+    return NavigateGraphMapper::toResponse(result, graph);
   }
 };
