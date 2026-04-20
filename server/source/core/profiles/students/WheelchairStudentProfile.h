@@ -11,24 +11,18 @@ public:
   double calculateEffectiveWeight(const Edge &edge) const override
   {
     double weight = edge.weight;
-    PathType pathType = static_cast<PathType>(edge.pathType);
+    PathType edgeType = static_cast<PathType>(edge.type);
 
     // Stairs are inaccessible (return infinity for pathfinding)
-    if (pathType == PathType::Stairs)
+    if (edgeType == PathType::Stairs)
     {
       return std::numeric_limits<double>::infinity();
     }
 
-    // Bonus for accessible paths
-    if (pathType == PathType::Ramp || pathType == PathType::Elevator)
+    // Bonus for accessible paths (elevator is easier)
+    if (edgeType == PathType::Elevator)
     {
       weight *= 0.9;
-    }
-
-    // Penalize steep slopes
-    if (std::abs(edge.slope) > 5.0)
-    {
-      weight *= (1.0 + std::abs(edge.slope) / 10.0);
     }
 
     return weight;
@@ -44,8 +38,8 @@ public:
     }
 
     // Wheelchair cannot use stairs
-    PathType pathType = static_cast<PathType>(edge.pathType);
-    if (pathType == PathType::Stairs)
+    PathType edgeType = static_cast<PathType>(edge.type);
+    if (edgeType == PathType::Stairs)
     {
       return false;
     }

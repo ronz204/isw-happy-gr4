@@ -39,10 +39,9 @@ public:
     {
       const auto &edge = edges[i];
       edgeList[i]["id"] = edge.id;
+      edgeList[i]["type"] = toString(static_cast<PathType>(edge.type));
       edgeList[i]["status"] = toString(static_cast<EdgeStatus>(edge.status));
-      edgeList[i]["pathType"] = toString(static_cast<PathType>(edge.pathType));
       edgeList[i]["weight"] = edge.weight;
-      edgeList[i]["slope"] = edge.slope;
       edgeList[i]["fromNodeId"] = edge.fromNodeId;
       edgeList[i]["toNodeId"] = edge.toNodeId;
     }
