@@ -5,32 +5,35 @@
 #include "../../database/enums/EdgeStatus.h"
 #include "../../database/models/Edge.h"
 #include "../../database/models/Node.h"
+#include <limits>
 
 class Profile
 {
 public:
   virtual ~Profile() = default;
 
-  // Calculate effective weight based on profile
-  virtual double calculateEffectiveWeight(const Edge &edge) const = 0;
+  // Get edge weight for this profile (infinity if not usable)
+  virtual double getWeight(const Edge &edge) const = 0;
 
-  // Check if edge is accessible for this profile
-  virtual bool isEdgeAccessible(const Edge &edge) const = 0;
-
-  // Check if node is preferred (for landmarks in NewStudent)
-  virtual bool isPreferredNode(const Node &node) const = 0;
-
-  // Get landmark bonus (used by NewStudent)
-  virtual double getLandmarkBonus(const Node &node) const = 0;
+  // Get node bonus (negative = preferred, used in pathfinding)
+  virtual double getNodeBonus(const Node &node) const = 0;
 
   // Get the profile type
   virtual ProfileType getProfileType() const = 0;
 
-protected:
-  // Check if edge is open (not blocked, closed, etc.)
-  bool isEdgeOpen(const Edge &edge) const
+  // Check if edge can be used by this profile
+  bool canUse(const Edge &edge) const
   {
+    // Universal rule: closed edges cannot be used by anyone
     EdgeStatus status = static_cast<EdgeStatus>(edge.status);
-    return status == EdgeStatus::Open;
+    if (status != EdgeStatus::Open)
+      return false;
+
+    // Profile-specific rules
+    return canUseByProfile(edge);
   }
+
+protected:
+  // Profile-specific edge validation (override if needed)
+  virtual bool canUseByProfile(const Edge &edge) const { return true; }
 };

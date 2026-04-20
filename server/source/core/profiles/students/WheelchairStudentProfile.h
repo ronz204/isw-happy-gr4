@@ -1,60 +1,26 @@
 #pragma once
 
 #include "../Profile.h"
-#include <cmath>
-#include <limits>
 
 class WheelchairStudentProfile : public Profile
 {
 public:
-  // Apply wheelchair-specific weight modifiers
-  double calculateEffectiveWeight(const Edge &edge) const override
+  double getWeight(const Edge &edge) const override
   {
-    double weight = edge.weight;
-    EdgeType edgeType = static_cast<EdgeType>(edge.type);
+    EdgeType type = static_cast<EdgeType>(edge.type);
 
-    // Stairs are inaccessible (return infinity for pathfinding)
-    if (edgeType == EdgeType::Stairs)
-    {
+    // Cannot use stairs
+    if (type == EdgeType::Stairs)
       return std::numeric_limits<double>::infinity();
-    }
 
-    // Bonus for accessible paths (elevator is easier)
-    if (edgeType == EdgeType::Elevator)
-    {
-      weight *= 0.9;
-    }
+    // Prefer elevators (10% faster)
+    if (type == EdgeType::Elevator)
+      return edge.weight * 0.9;
 
-    return weight;
+    return edge.weight;
   }
 
-  // Check if edge is accessible for wheelchair
-  bool isEdgeAccessible(const Edge &edge) const override
-  {
-    // First check: edge must be open
-    if (!isEdgeOpen(edge))
-    {
-      return false;
-    }
-
-    // Wheelchair cannot use stairs
-    EdgeType edgeType = static_cast<EdgeType>(edge.type);
-    if (edgeType == EdgeType::Stairs)
-    {
-      return false;
-    }
-
-    return true;
-  }
-
-  // Wheelchair profile has no preferred nodes
-  bool isPreferredNode(const Node &node) const override
-  {
-    return false;
-  }
-
-  // Wheelchair profile has no landmark bonus
-  double getLandmarkBonus(const Node &node) const override
+  double getNodeBonus(const Node &node) const override
   {
     return 0.0;
   }
@@ -62,5 +28,12 @@ public:
   ProfileType getProfileType() const override
   {
     return ProfileType::Wheelchair;
+  }
+
+protected:
+  bool canUseByProfile(const Edge &edge) const override
+  {
+    EdgeType type = static_cast<EdgeType>(edge.type);
+    return type != EdgeType::Stairs;
   }
 };
