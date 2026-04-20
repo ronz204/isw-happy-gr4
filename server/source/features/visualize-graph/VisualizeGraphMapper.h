@@ -6,6 +6,7 @@
 #include "../../database/models/Edge.h"
 #include "../../database/enums/NodeType.h"
 #include "../../database/enums/EdgeStatus.h"
+#include "../../database/enums/PathType.h"
 
 class VisualizeGraphMapper
 {
@@ -27,6 +28,8 @@ public:
       nodeList[i]["py"] = node.py;
       nodeList[i]["code"] = node.code;
       nodeList[i]["label"] = node.label;
+      nodeList[i]["isLandmark"] = node.isLandmark;
+      nodeList[i]["landmarkLvl"] = node.landmarkLvl;
     }
 
     // Map edges
@@ -37,7 +40,9 @@ public:
       const auto &edge = edges[i];
       edgeList[i]["id"] = edge.id;
       edgeList[i]["status"] = toString(static_cast<EdgeStatus>(edge.status));
+      edgeList[i]["pathType"] = toString(static_cast<PathType>(edge.pathType));
       edgeList[i]["weight"] = edge.weight;
+      edgeList[i]["slope"] = edge.slope;
       edgeList[i]["fromNodeId"] = edge.fromNodeId;
       edgeList[i]["toNodeId"] = edge.toNodeId;
     }
