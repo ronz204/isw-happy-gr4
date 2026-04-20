@@ -3,6 +3,7 @@
 #include <crow/middlewares/cors.h>
 #include "features/visualize-graph/VisualizeGraphRoute.h"
 #include "features/navigate-graph/NavigateGraphRoute.h"
+#include "features/update-edge/UpdateEdgeRoute.h"
 
 int main()
 {
@@ -14,7 +15,7 @@ int main()
   // Configure CORS middleware
   auto &cors = app.get_middleware<crow::CORSHandler>();
   cors.global().headers("Content-Type")
-      .methods("GET"_method, "POST"_method, "PUT"_method, "DELETE"_method)
+      .methods("GET"_method, "POST"_method, "PUT"_method, "DELETE"_method, "PATCH"_method)
       .origin("*");
 
   // Health check endpoint
@@ -29,6 +30,7 @@ int main()
   // Register feature routes
   VisualizeGraphRoute::setupRoutes(app, storage);
   NavigateGraphRoute::setupRoutes(app, storage);
+  UpdateEdgeRoute::setupRoutes(app, storage);
 
   app.port(4000).multithreaded().run();
 }

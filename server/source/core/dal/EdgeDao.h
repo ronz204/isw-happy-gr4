@@ -17,6 +17,11 @@ public:
     return storage.get_all<Edge>();
   }
 
+  Edge getById(int id)
+  {
+    return storage.get<Edge>(id);
+  }
+
   void update(const Edge &edge)
   {
     storage.update(edge);
