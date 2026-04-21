@@ -97,16 +97,19 @@ public:
       result.distance = distances[endNodeId];
 
       // Reconstruct path from end to start
-      std::vector<int> reversePath;
+      std::vector<int> reversePathIds;
       int current = endNodeId;
       while (current != -1)
       {
-        reversePath.push_back(current);
+        reversePathIds.push_back(current);
         current = parent[current];
       }
 
-      // Reverse to get path from start to end
-      result.path = std::vector<int>(reversePath.rbegin(), reversePath.rend());
+      // Reverse to get path IDs from start to end
+      std::vector<int> pathIds(reversePathIds.rbegin(), reversePathIds.rend());
+      
+      // Convert IDs to PathNodes
+      result.path = SearchResponse::convertToPathNodes(pathIds, graph);
     }
 
     // End timing

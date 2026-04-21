@@ -31,14 +31,14 @@ public:
     }
 
     std::unordered_set<int> visited;
-    std::vector<int> path;
+    std::vector<int> pathIds;
     double distance = 0.0;
 
     // Perform DFS
-    if (dfsRecursive(graph, profile, startNodeId, endNodeId, visited, path, distance))
+    if (dfsRecursive(graph, profile, startNodeId, endNodeId, visited, pathIds, distance))
     {
       result.success = true;
-      result.path = path;
+      result.path = SearchResponse::convertToPathNodes(pathIds, graph);
       result.distance = distance;
     }
 
