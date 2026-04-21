@@ -26,7 +26,14 @@ public:
 
   void addEdge(const Edge &edge)
   {
+    // Add edge in forward direction
     adjacencyList[edge.fromNodeId].push_back(edge);
+    
+    // Add edge in reverse direction for undirected graph
+    Edge reverseEdge = edge;
+    reverseEdge.fromNodeId = edge.toNodeId;
+    reverseEdge.toNodeId = edge.fromNodeId;
+    adjacencyList[edge.toNodeId].push_back(reverseEdge);
   }
 
   const std::unordered_map<int, Node> &getNodes() const

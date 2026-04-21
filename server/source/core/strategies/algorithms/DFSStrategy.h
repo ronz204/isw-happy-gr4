@@ -69,7 +69,7 @@ private:
       return true;
     }
 
-    // Explore all edges from current node
+    // Explore all edges from current node (graph is bidirectional)
     const std::vector<Edge> *edges = graph.getEdges(currentNodeId);
     if (edges)
     {
@@ -99,43 +99,6 @@ private:
           return true;
         }
         distance -= edgeWeight;
-      }
-    }
-
-    // For undirected graph, also check edges where current node is the destination
-    const auto &adjacencyList = graph.getAdjacencyList();
-    for (const auto &[nodeId, edges] : adjacencyList)
-    {
-      for (const Edge &edge : edges)
-      {
-        // Check if this edge connects to current node (reverse direction)
-        if (edge.toNodeId == currentNodeId)
-        {
-          int neighborId = edge.fromNodeId;
-
-          // Skip if already visited
-          if (visited.count(neighborId))
-            continue;
-
-          // Skip if profile cannot use this edge
-          if (!profile.canUse(edge))
-            continue;
-
-          // Get edge weight according to profile
-          double edgeWeight = profile.getWeight(edge);
-
-          // Skip if edge is not usable (infinite weight)
-          if (edgeWeight == std::numeric_limits<double>::infinity())
-            continue;
-
-          // Recursively search
-          distance += edgeWeight;
-          if (dfsRecursive(graph, profile, neighborId, targetNodeId, visited, path, distance))
-          {
-            return true;
-          }
-          distance -= edgeWeight;
-        }
       }
     }
 
