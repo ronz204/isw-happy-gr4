@@ -1,156 +1,55 @@
 #pragma once
 
 #include "../../database/models/Graph.h"
-#include "../../database/enums/EdgeStatus.h"
-#include "../strategies/SearchStrategy.h"
-#include "../strategies/DFSStrategy.h"
-#include "../profiles/Profile.h"
-#include "../response/TraversalResult.h"
-#include "../response/PathResult.h"
-#include <memory>
-#include <unordered_set>
-#include <queue>
+#include "../../database/models/Node.h"
+#include "../../database/models/Edge.h"
+#include <vector>
+#include <optional>
 
 class GraphDao
 {
 private:
-  const Graph &graph;
-
-  // Check if edge is open (not blocked/closed)
-  bool isEdgeOpen(const Edge *edge) const
-  {
-    if (!edge)
-      return false;
-    
-    EdgeStatus status = static_cast<EdgeStatus>(edge->status);
-    return status == EdgeStatus::Open;
-  }
-
-  void dfsConnectivityHelper(int node, std::unordered_set<int> &visited) const
-  {
-    visited.insert(node);
-
-    const auto *neighbors = graph.getNeighbors(node);
-    if (!neighbors)
-      return;
-
-    for (const auto &neighbor : *neighbors)
-    {
-      if (visited.find(neighbor.toNodeId) == visited.end())
-      {
-        // Only traverse through open edges
-        const Edge *edge = graph.getEdge(neighbor.edgeId);
-        if (!isEdgeOpen(edge))
-          continue;
-
-        dfsConnectivityHelper(neighbor.toNodeId, visited);
-      }
-    }
-  }
+  Graph &graph;
 
 public:
-  GraphDao(const Graph &graph) : graph(graph) {}
+  GraphDao(Graph &graph) : graph(graph) {}
 
-  // Check if graph is fully connected
-  bool isConnected() const
+  std::optional<Node> getNodeById(int nodeId) const
   {
-    auto nodeIds = graph.getAllNodeIds();
-    if (nodeIds.empty())
-      return true;
-
-    std::unordered_set<int> visited;
-    dfsConnectivityHelper(nodeIds[0], visited);
-
-    return visited.size() == nodeIds.size();
+    const Node *node = graph.getNode(nodeId);
+    if (node)
+    {
+      return *node;
+    }
+    return std::nullopt;
   }
 
-  // Check if path exists between two nodes
-  bool hasPath(int startId, int endId, const Profile &profile) const
+  std::vector<Node> getAllNodes() const
   {
-    if (startId == endId)
-      return true;
+    std::vector<Node> result;
+    const auto &nodes = graph.getNodes();
+    result.reserve(nodes.size());
 
-    std::unordered_set<int> visited;
-    std::queue<int> queue;
-
-    queue.push(startId);
-    visited.insert(startId);
-
-    while (!queue.empty())
+    for (const auto &[id, node] : nodes)
     {
-      int current = queue.front();
-      queue.pop();
-
-      if (current == endId)
-        return true;
-
-      const auto *neighbors = graph.getNeighbors(current);
-      if (!neighbors)
-        continue;
-
-      for (const auto &neighbor : *neighbors)
-      {
-        if (visited.find(neighbor.toNodeId) == visited.end())
-        {
-          const Edge *edge = graph.getEdge(neighbor.edgeId);
-          if (!edge || !profile.isEdgeAccessible(*edge))
-            continue;
-
-          visited.insert(neighbor.toNodeId);
-          queue.push(neighbor.toNodeId);
-        }
-      }
+      result.push_back(node);
     }
 
-    return false;
+    return result;
   }
 
-  // Perform traversal using a strategy
-  TraversalResult performTraversal(
-      int startNodeId,
-      const SearchStrategy &strategy,
-      const Profile &profile) const
+  std::vector<Edge> getEdges(int nodeId) const
   {
-    return strategy.traverse(graph, startNodeId, profile);
-  }
-
-  // Find path using a strategy
-  PathResult findPath(
-      int startNodeId,
-      int endNodeId,
-      const SearchStrategy &strategy,
-      const Profile &profile) const
-  {
-    return strategy.findPath(graph, startNodeId, endNodeId, profile);
-  }
-
-  // Get node count
-  int getNodeCount() const
-  {
-    return graph.getNodeCount();
-  }
-
-  // Get edge count
-  int getEdgeCount() const
-  {
-    return graph.getEdgeCount();
-  }
-
-  // Get isolated nodes (nodes with no connections)
-  std::vector<int> getIsolatedNodes() const
-  {
-    std::vector<int> isolated;
-    auto nodeIds = graph.getAllNodeIds();
-
-    for (int nodeId : nodeIds)
+    const auto *edges = graph.getEdges(nodeId);
+    if (edges)
     {
-      const auto *neighbors = graph.getNeighbors(nodeId);
-      if (!neighbors || neighbors->empty())
-      {
-        isolated.push_back(nodeId);
-      }
+      return *edges;
     }
+    return {};
+  }
 
-    return isolated;
+  bool nodeExists(int nodeId) const
+  {
+    return graph.getNode(nodeId) != nullptr;
   }
 };

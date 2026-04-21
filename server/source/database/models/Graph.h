@@ -1,80 +1,53 @@
 #pragma once
 
+#include <unordered_map>
+#include <vector>
+#include <memory>
 #include "Node.h"
 #include "Edge.h"
-
-#include <vector>
-#include <unordered_map>
-
-struct GraphEdge
-{
-  int toNodeId;
-  double weight;
-  int edgeId;
-};
 
 class Graph
 {
 private:
   std::unordered_map<int, Node> nodes;
-  std::unordered_map<int, std::vector<GraphEdge>> adjList;
-  std::unordered_map<int, Edge> edges;
+  std::unordered_map<int, std::vector<Edge>> adjacencyList;
 
 public:
+  Graph() = default;
+
   void addNode(const Node &node)
   {
     nodes[node.id] = node;
-  };
+    if (adjacencyList.find(node.id) == adjacencyList.end())
+    {
+      adjacencyList[node.id] = std::vector<Edge>();
+    }
+  }
 
   void addEdge(const Edge &edge)
   {
-    edges[edge.id] = edge;
-    adjList[edge.fromNodeId].push_back({edge.toNodeId, edge.weight, edge.id});
-    adjList[edge.toNodeId].push_back({edge.fromNodeId, edge.weight, edge.id});
-  };
-
-  // Getters
-  const Node *getNode(int id) const
-  {
-    auto it = nodes.find(id);
-    return it != nodes.end() ? &it->second : nullptr;
+    adjacencyList[edge.fromNodeId].push_back(edge);
   }
 
-  const Edge *getEdge(int id) const
-  {
-    auto it = edges.find(id);
-    return it != edges.end() ? &it->second : nullptr;
-  }
-
-  const std::vector<GraphEdge> *getNeighbors(int nodeId) const
-  {
-    auto it = adjList.find(nodeId);
-    return it != adjList.end() ? &it->second : nullptr;
-  }
-
-  const std::unordered_map<int, Node> &getAllNodes() const
+  const std::unordered_map<int, Node> &getNodes() const
   {
     return nodes;
   }
 
-  std::vector<int> getAllNodeIds() const
+  const std::unordered_map<int, std::vector<Edge>> &getAdjacencyList() const
   {
-    std::vector<int> ids;
-    ids.reserve(nodes.size());
-    for (const auto &pair : nodes)
-    {
-      ids.push_back(pair.first);
-    }
-    return ids;
+    return adjacencyList;
   }
 
-  int getNodeCount() const
+  const Node *getNode(int nodeId) const
   {
-    return nodes.size();
+    auto it = nodes.find(nodeId);
+    return (it != nodes.end()) ? &it->second : nullptr;
   }
 
-  int getEdgeCount() const
+  const std::vector<Edge> *getEdges(int nodeId) const
   {
-    return edges.size();
+    auto it = adjacencyList.find(nodeId);
+    return (it != adjacencyList.end()) ? &it->second : nullptr;
   }
 };
