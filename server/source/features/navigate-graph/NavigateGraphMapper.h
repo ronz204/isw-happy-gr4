@@ -1,7 +1,7 @@
 #pragma once
 
 #include <crow.h>
-#include "../../core/strategies/SearchStrategy.h"
+#include "../../core/strategies/SearchResponse.h"
 #include "../../database/enums/NodeType.h"
 
 class NavigateGraphMapper

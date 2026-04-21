@@ -6,8 +6,7 @@
 #include "../../core/dal/GraphDao.h"
 #include "../../core/profiles/ProfileFactory.h"
 #include "../../core/strategies/SearchContext.h"
-#include "../../core/strategies/algorithms/BFSStrategy.h"
-#include "../../core/strategies/algorithms/DFSStrategy.h"
+#include "../../core/strategies/SearchFactory.h"
 #include "NavigateGraphSchema.h"
 #include "NavigateGraphMapper.h"
 
@@ -54,17 +53,14 @@ public:
       // Create profile based on request
       auto profile = ProfileFactory::createProfile(navRequest.profile);
 
-      // Create strategy based on request
+      // Create strategy based on request using factory
       SearchContext searchContext;
-      if (navRequest.strategy == "BFS")
+      try
       {
-        searchContext.setStrategy(std::make_unique<BFSStrategy>());
+        auto strategy = SearchFactory::createStrategy(navRequest.strategy);
+        searchContext.setStrategy(std::move(strategy));
       }
-      else if (navRequest.strategy == "DFS")
-      {
-        searchContext.setStrategy(std::make_unique<DFSStrategy>());
-      }
-      else
+      catch (const std::invalid_argument &)
       {
         return crow::json::wvalue{{"error", "Invalid strategy"}};
       }

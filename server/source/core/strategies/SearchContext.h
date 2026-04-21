@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SearchStrategy.h"
+#include "SearchResponse.h"
 #include <memory>
 
 class SearchContext
