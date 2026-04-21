@@ -24,15 +24,11 @@ INSERT INTO nodes (type, floor, px, py, code, label, isLandmark, landmarkLvl) VA
 -- Elevator - Edificio (Morado)
 (5, 4, 1053.0, 379.0, 'EL-EDI-F4', 'Elevador F4', 0, 0),
 
--- =================================================================
-
 -- Waypoints - Eje Vertical, Entrada a Edificio (4 puntos)
 (0, 4, 993.0, 555.0, 'WP-F4-01', '', 0, 0),
 (0, 4, 933.0, 503.0, 'WP-F4-02', '', 0, 0),
 (0, 4, 933.0, 460.0, 'WP-F4-03', '', 0, 0),
 (0, 4, 933.0, 420.0, 'WP-F4-04', '', 0, 0),
-
--- =================================================================
 
 -- Waypoints - Eje Horizontal, Entrada a Parqueo (8 Puntos)
 (0, 4, 940.0, 619.0, 'WP-F4-05', '', 0, 0),
@@ -49,8 +45,6 @@ INSERT INTO nodes (type, floor, px, py, code, label, isLandmark, landmarkLvl) VA
 (0, 4, 479.0, 515.0, 'WP-F4-14', '', 0, 0),
 (0, 4, 479.0, 466.0, 'WP-F4-15', '', 0, 0),
 (0, 4, 479.0, 418.0, 'WP-F4-16', '', 0, 0),
-
--- =================================================================
 
 -- Waypoints - Eje Horizontal, Izquierda Edificio (4 puntos)
 (0, 4, 946.0, 420.0, 'WP-F4-17', '', 0, 0),
@@ -81,7 +75,5 @@ INSERT INTO nodes (type, floor, px, py, code, label, isLandmark, landmarkLvl) VA
 (4, 4, 596.0, 364.0, 'ST-CAF-DOWN-LIB', 'Escalera Biblioteca', 0, 0),
 (5, 4, 549.0, 364.0, 'EL-CAF-F4', 'Elevador Biblioteca', 0, 0),
 
--- =================================================================
-
 -- Waypoints - Pasillo Comedor (1 puntos)
-(0, 4, 483.0, 362.0, 'WP-F4-28', '', 0, 0),
+(0, 4, 483.0, 362.0, 'WP-F4-28', '', 0, 0);
