@@ -11,14 +11,14 @@ enum class NodeType
   StairsUp = 3,
   StairsDown = 4,
   Elevator = 5,
-  BathroomF = 6,
-  BathroomM = 7,
-  Service = 8,
-  Entrance = 9,
-  Library = 10,
-  Cafeteria = 11,
-  Parking = 12,
-  Auditorium = 13,
+  Bathroom = 6,
+  Service = 7,
+  Entrance = 8,
+  Library = 9,
+  Cafeteria = 10,
+  Parking = 11,
+  Auditorium = 12,
+  Security = 13,
 };
 
 // Convert NodeType to string
@@ -30,14 +30,14 @@ inline std::string toString(NodeType type) {
     case NodeType::StairsUp: return "StairsUp";
     case NodeType::StairsDown: return "StairsDown";
     case NodeType::Elevator: return "Elevator";
-    case NodeType::BathroomM: return "BathroomM";
-    case NodeType::BathroomF: return "BathroomF";
+    case NodeType::Bathroom: return "Bathroom";
     case NodeType::Service: return "Service";
     case NodeType::Entrance: return "Entrance";
     case NodeType::Library: return "Library";
     case NodeType::Cafeteria: return "Cafeteria";
     case NodeType::Parking: return "Parking";
     case NodeType::Auditorium: return "Auditorium";
+    case NodeType::Security: return "Security";
     default: throw std::invalid_argument("Invalid NodeType");
   }
 }
@@ -48,8 +48,7 @@ inline NodeType nodeTypeFromString(const std::string& str) {
   if (str == "Room") return NodeType::Room;
   if (str == "Office") return NodeType::Office;
   if (str == "Elevator") return NodeType::Elevator;
-  if (str == "BathroomM") return NodeType::BathroomM;
-  if (str == "BathroomF") return NodeType::BathroomF;
+  if (str == "Bathroom") return NodeType::Bathroom;
   if (str == "Service") return NodeType::Service;
   if (str == "Entrance") return NodeType::Entrance;
   if (str == "Library") return NodeType::Library;
@@ -58,6 +57,7 @@ inline NodeType nodeTypeFromString(const std::string& str) {
   if (str == "Auditorium") return NodeType::Auditorium;
   if (str == "StairsUp") return NodeType::StairsUp;
   if (str == "StairsDown") return NodeType::StairsDown;
+  if (str == "Security") return NodeType::Security;
   throw std::invalid_argument("Invalid NodeType string: " + str);
 }
 
