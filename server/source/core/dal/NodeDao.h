@@ -17,6 +17,11 @@ public:
     return storage.get_all<Node>();
   }
 
+  std::vector<Node> getLandmarks()
+  {
+    return storage.get_all<Node>(sql::where(sql::c(&Node::isLandmark) == true));
+  }
+
   void update(const Node &node)
   {
     storage.update(node);

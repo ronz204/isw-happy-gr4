@@ -4,6 +4,7 @@
 #include "features/visualize-graph/VisualizeGraphRoute.h"
 #include "features/update-edge/UpdateEdgeRoute.h"
 #include "features/navigate-graph/NavigateGraphRoute.h"
+#include "features/get-landmarks/GetLandMarksRoute.h"
 
 int main()
 {
@@ -31,6 +32,7 @@ int main()
   VisualizeGraphRoute::setupRoutes(app, storage);
   UpdateEdgeRoute::setupRoutes(app, storage);
   NavigateGraphRoute::setupRoutes(app, storage);
+  GetLandMarksRoute::setupRoutes(app, storage);
 
   app.port(4000).multithreaded().run();
 }
