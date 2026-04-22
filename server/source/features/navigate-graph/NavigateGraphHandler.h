@@ -26,8 +26,8 @@ public:
       return crow::json::wvalue{{"error", "Invalid JSON"}};
     }
 
-    NavigateGraphRequest navRequest;
-    auto [isValid, errorMessage] = NavigateGraphSchema::validate(body, navRequest);
+    NavigateGraphRequest request;
+    auto [isValid, errorMessage] = NavigateGraphSchema::validate(body, request);
     if (!isValid)
     {
       return crow::json::wvalue{{"error", errorMessage}};
@@ -35,29 +35,25 @@ public:
 
     try
     {
-      // Load graph from database
       GraphLoader graphLoader(storage);
       auto graph = graphLoader.loadGraph();
 
-      // Validate that start and end nodes exist
       GraphDao graphDao(*graph);
-      if (!graphDao.nodeExists(navRequest.startNodeId))
+      if (!graphDao.nodeExists(request.startNodeId))
       {
         return crow::json::wvalue{{"error", "Start node not found"}};
       }
-      if (!graphDao.nodeExists(navRequest.endNodeId))
+      if (!graphDao.nodeExists(request.endNodeId))
       {
         return crow::json::wvalue{{"error", "End node not found"}};
       }
 
-      // Create profile based on request
-      auto profile = ProfileFactory::createProfile(navRequest.profile);
+      auto profile = ProfileFactory::createProfile(request.profile);
 
-      // Create strategy based on request using factory
       SearchContext searchContext;
       try
       {
-        auto strategy = SearchFactory::createStrategy(navRequest.strategy);
+        auto strategy = SearchFactory::createStrategy(request.strategy);
         searchContext.setStrategy(std::move(strategy));
       }
       catch (const std::invalid_argument &)
@@ -65,14 +61,12 @@ public:
         return crow::json::wvalue{{"error", "Invalid strategy"}};
       }
 
-      // Execute search
       SearchResponse searchResponse = searchContext.executeSearch(
           *graph,
           *profile,
-          navRequest.startNodeId,
-          navRequest.endNodeId);
+          request.startNodeId,
+          request.endNodeId);
 
-      // Map response to JSON
       return NavigateGraphMapper::toResponse(searchResponse);
     }
     catch (const std::exception &e)

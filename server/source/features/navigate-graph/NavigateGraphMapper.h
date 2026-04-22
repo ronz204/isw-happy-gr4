@@ -7,7 +7,6 @@
 class NavigateGraphMapper
 {
 public:
-  // Convert SearchResponse to JSON response
   static crow::json::wvalue toResponse(const SearchResponse &searchResponse)
   {
     crow::json::wvalue response;
@@ -19,22 +18,21 @@ public:
 
     if (searchResponse.success)
     {
-      // Map path nodes to JSON array
-      std::vector<crow::json::wvalue> pathArray;
-      for (const auto &pathNode : searchResponse.path)
+      response["path"] = crow::json::wvalue::list();
+      auto &pathArray = response["path"];
+      
+      for (size_t i = 0; i < searchResponse.path.size(); i++)
       {
-        crow::json::wvalue node;
-        node["code"] = pathNode.code;
-        node["px"] = pathNode.px;
-        node["py"] = pathNode.py;
-        node["type"] = toString(static_cast<NodeType>(pathNode.type));
-        pathArray.push_back(std::move(node));
+        const auto &pathNode = searchResponse.path[i];
+        pathArray[i]["code"] = pathNode.code;
+        pathArray[i]["px"] = pathNode.px;
+        pathArray[i]["py"] = pathNode.py;
+        pathArray[i]["type"] = toString(static_cast<NodeType>(pathNode.type));
       }
-      response["path"] = std::move(pathArray);
     }
     else
     {
-      response["path"] = std::vector<crow::json::wvalue>();
+      response["path"] = crow::json::wvalue::list();
       response["message"] = "No path found between the specified nodes";
     }
 

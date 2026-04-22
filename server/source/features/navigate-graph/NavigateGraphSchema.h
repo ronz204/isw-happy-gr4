@@ -15,7 +15,6 @@ struct NavigateGraphRequest
 class NavigateGraphSchema
 {
 public:
-  // Parse and validate request body
   static std::pair<bool, std::string> validate(const crow::json::rvalue &body, NavigateGraphRequest &request)
   {
     // Validate startNodeId
@@ -49,10 +48,11 @@ public:
     {
       return {false, "Field 'profile' must be a string"};
     }
+    
     std::string profileStr = body["profile"].s();
     try
     {
-      profileTypeFromString(profileStr); // Validate it's a valid ProfileType
+      profileTypeFromString(profileStr);
       request.profile = profileStr;
     }
     catch (const std::invalid_argument &)
@@ -69,9 +69,8 @@ public:
     {
       return {false, "Field 'strategy' must be a string"};
     }
-    std::string strategyStr = body["strategy"].s();
     
-    // Validate strategy is BFS or DFS
+    std::string strategyStr = body["strategy"].s();
     if (strategyStr != "BFS" && strategyStr != "DFS")
     {
       return {false, "Invalid strategy. Valid values: BFS, DFS"};
