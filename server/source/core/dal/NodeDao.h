@@ -22,6 +22,11 @@ public:
     return storage.get_all<Node>(sql::where(sql::c(&Node::isLandmark) == true));
   }
 
+  std::vector<Node> getByFloor(int floor)
+  {
+    return storage.get_all<Node>(sql::where(sql::c(&Node::floor) == floor));
+  }
+
   void update(const Node &node)
   {
     storage.update(node);

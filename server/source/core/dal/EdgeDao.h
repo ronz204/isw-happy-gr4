@@ -22,6 +22,11 @@ public:
     return storage.get<Edge>(id);
   }
 
+  std::vector<Edge> getByFloor(int floor)
+  {
+    return storage.get_all<Edge>(sql::where(sql::c(&Edge::floor) == floor));
+  }
+
   void update(const Edge &edge)
   {
     storage.update(edge);
