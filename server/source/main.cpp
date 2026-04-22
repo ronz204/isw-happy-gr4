@@ -5,6 +5,7 @@
 #include "features/navigate-graph/NavigateGraphRoute.h"
 #include "features/get-landmarks/GetLandMarksRoute.h"
 #include "features/get-nodes-floor/GetNodesByFloorRoute.h"
+#include "features/get-graph-full/GetGraphFullRoute.h"
 
 int main()
 {
@@ -33,6 +34,7 @@ int main()
   NavigateGraphRoute::setupRoutes(app, storage);
   GetLandMarksRoute::setupRoutes(app, storage);
   GetNodesByFloorRoute::setupRoutes(app, storage);
+  GetGraphFullRoute::setupRoutes(app, storage);
 
   app.port(4000).multithreaded().run();
 }
