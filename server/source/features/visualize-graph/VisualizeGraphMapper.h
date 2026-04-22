@@ -29,7 +29,6 @@ public:
       nodeList[i]["code"] = node.code;
       nodeList[i]["label"] = node.label;
       nodeList[i]["isLandmark"] = node.isLandmark;
-      nodeList[i]["landmarkLvl"] = node.landmarkLvl;
     }
 
     // Map edges

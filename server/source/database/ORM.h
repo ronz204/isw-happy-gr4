@@ -19,8 +19,7 @@ inline auto initStorage(const std::string &path)
           sql::make_column("code", &Node::code, sql::not_null()),
           sql::make_column("label", &Node::label, sql::not_null()),
           sql::make_column("type", &Node::type, sql::not_null()),
-          sql::make_column("isLandmark", &Node::isLandmark, sql::default_value(false)),
-          sql::make_column("landmarkLvl", &Node::landmarkLvl, sql::default_value(0))),
+          sql::make_column("isLandmark", &Node::isLandmark, sql::default_value(false))),
       sql::make_table(
           "edges",
           sql::make_column("id", &Edge::id, sql::primary_key().autoincrement()),

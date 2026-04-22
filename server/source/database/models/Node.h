@@ -13,5 +13,4 @@ struct Node
   std::string label;
 
   bool isLandmark;
-  int landmarkLvl;
 };

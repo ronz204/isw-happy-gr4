@@ -15,8 +15,7 @@ public:
     if (!node.isLandmark) return 0.0;
 
     // Negative bonus = preferred (lower cost in pathfinding)
-    // landmarkLvl: 1=most important, higher=less important
-    return -5.0 * (6 - node.landmarkLvl);
+    return -5.0;
   }
 
   ProfileType getProfileType() const override

@@ -13,7 +13,7 @@ public:
   {
     auto handler = std::make_shared<NavigateGraphHandler>(storage);
 
-    CROW_ROUTE(app, "/api/graph/navigate")
+    CROW_ROUTE(app, "/api/graph/route")
         .methods(crow::HTTPMethod::POST)([handler](const crow::request &req)
                                          { return handler->navigate(req); });
   }
