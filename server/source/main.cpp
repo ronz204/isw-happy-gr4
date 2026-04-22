@@ -1,11 +1,12 @@
 #include <crow.h>
 #include "database/ORM.h"
 #include <crow/middlewares/cors.h>
-#include "features/update-edge/UpdateEdgeRoute.h"
 #include "features/navigate-graph/NavigateGraphRoute.h"
 #include "features/get-landmarks/GetLandMarksRoute.h"
 #include "features/get-nodes-floor/GetNodesByFloorRoute.h"
 #include "features/get-graph-full/GetGraphFullRoute.h"
+#include "features/patch-close-edge/PatchCloseEdgeRoute.h"
+#include "features/patch-open-edge/PatchOpenEdgeRoute.h"
 
 int main()
 {
@@ -30,11 +31,12 @@ int main()
   });
 
   // Register feature routes
-  UpdateEdgeRoute::setupRoutes(app, storage);
   NavigateGraphRoute::setupRoutes(app, storage);
   GetLandMarksRoute::setupRoutes(app, storage);
   GetNodesByFloorRoute::setupRoutes(app, storage);
   GetGraphFullRoute::setupRoutes(app, storage);
+  PatchCloseEdgeRoute::setupRoutes(app, storage);
+  PatchOpenEdgeRoute::setupRoutes(app, storage);
 
   app.port(4000).multithreaded().run();
 }
