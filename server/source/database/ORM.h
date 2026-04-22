@@ -24,6 +24,7 @@ inline auto initStorage(const std::string &path)
           "edges",
           sql::make_column("id", &Edge::id, sql::primary_key().autoincrement()),
           sql::make_column("type", &Edge::type, sql::not_null()),
+          sql::make_column("floor", &Edge::floor, sql::not_null()),
           sql::make_column("weight", &Edge::weight, sql::not_null()),
           sql::make_column("fromNodeId", &Edge::fromNodeId, sql::not_null()),
           sql::make_column("toNodeId", &Edge::toNodeId, sql::not_null()),

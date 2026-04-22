@@ -1,5 +1,5 @@
-INSERT INTO edges (type, status, weight, fromNodeId, toNodeId)
-SELECT 0, 1, 10.0,
+INSERT INTO edges (type, floor, status, weight, fromNodeId, toNodeId)
+SELECT 0, 4, 1, 10.0,
   (SELECT id FROM nodes WHERE code = code1),
   (SELECT id FROM nodes WHERE code = code2)
 FROM (

@@ -6,6 +6,7 @@ struct Edge
 {
   int id;
   int type;
+  int floor;
   int status;
   double weight;
 
