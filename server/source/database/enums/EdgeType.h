@@ -37,7 +37,3 @@ inline int toInt(EdgeType type)
 {
   return static_cast<int>(type);
 }
-
-inline bool isStairs(NodeType type) {
-  return type == NodeType::StairsUp || type == NodeType::StairsDown;
-}
