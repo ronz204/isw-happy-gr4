@@ -12,7 +12,7 @@ enum class NodeType
   StairsDown = 4,
   Elevator = 5,
   Bathroom = 6,
-  Service = 7,
+  Chilling = 7,
   Entrance = 8,
   Library = 9,
   Cafeteria = 10,
@@ -31,7 +31,7 @@ inline std::string toString(NodeType type) {
     case NodeType::StairsDown: return "StairsDown";
     case NodeType::Elevator: return "Elevator";
     case NodeType::Bathroom: return "Bathroom";
-    case NodeType::Service: return "Service";
+    case NodeType::Chilling: return "Chilling";
     case NodeType::Entrance: return "Entrance";
     case NodeType::Library: return "Library";
     case NodeType::Cafeteria: return "Cafeteria";
@@ -49,7 +49,7 @@ inline NodeType nodeTypeFromString(const std::string& str) {
   if (str == "Office") return NodeType::Office;
   if (str == "Elevator") return NodeType::Elevator;
   if (str == "Bathroom") return NodeType::Bathroom;
-  if (str == "Service") return NodeType::Service;
+  if (str == "Chilling") return NodeType::Chilling;
   if (str == "Entrance") return NodeType::Entrance;
   if (str == "Library") return NodeType::Library;
   if (str == "Cafeteria") return NodeType::Cafeteria;
