@@ -10,5 +10,9 @@ export default defineConfig({
     "@assets": "/src/assets",
     "@features": "/src/features",
     "@shared": "/src/shared",
+
+    "@logic": "/src/core/logic",
+    "@hooks": "/src/core/hooks",
+    "@domain": "/src/core/types",
   }},
 });
