@@ -32,8 +32,7 @@ function toggle() {
     :class="collapsed ? 'w-16' : 'w-60'" :style="{ background: 'var(--sidebar-bg)' }">
     <!-- Brand header -->
     <div class="flex items-center gap-3 px-4 h-16 border-b border-sidebar-border shrink-0">
-      <div class="flex items-center justify-center shrink-0 w-8 h-8 rounded-lg"
-        style="background: oklch(0.60 0.22 250 / 0.18); color: oklch(0.70 0.20 250);">
+      <div class="flex items-center justify-center shrink-0 w-8 h-8 rounded-lg bg-primary/18 text-primary-lite">
         <Building2 :size="17" />
       </div>
       <Transition name="label-fade">
@@ -49,11 +48,10 @@ function toggle() {
       <RouterLink v-for="item in navItems" :key="item.name" :to="item.path"
         class="relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 group"
         :class="isActive(item.path)
-          ? 'text-[oklch(0.72_0.20_250)] bg-[oklch(0.60_0.22_250/0.12)] ring-1 ring-[oklch(0.60_0.22_250/0.25)]'
+          ? 'text-primary-lite bg-primary/12 ring-1 ring-primary/25'
           : 'text-muted-foreground hover:text-foreground hover:bg-(--ui-bg-accented)'">
         <!-- Active left pill -->
-        <span v-if="isActive(item.path)" class="absolute left-0 top-1/2 -translate-y-1/2 w-0.75 h-5 rounded-full"
-          style="background: oklch(0.65 0.22 250);" />
+        <span v-if="isActive(item.path)" class="absolute left-0 top-1/2 -translate-y-1/2 w-0.75 h-5 rounded-full bg-primary-dim" />
 
         <component :is="item.icon" :size="17" class="shrink-0" />
 

@@ -35,6 +35,11 @@
   /* Sidebar (slightly lighter than bg) */
   --sidebar-bg:     oklch(0.10 0.008 250);
   --sidebar-border: oklch(0.20 0.007 250);
+
+  /* Blue palette */
+  --ui-primary:      oklch(0.60 0.22 250);  /* base blue */
+  --ui-primary-lite: oklch(0.70 0.20 250);  /* text & icons on dark bg */
+  --ui-primary-dim:  oklch(0.65 0.22 250);  /* indicators / pills */
 }
 
 /* ─── 2. Tailwind theme variables (literal values) ───────────────────────── */
@@ -59,13 +64,15 @@
   --color-accent-foreground:    var(--ui-text);
 
   /* Primary (blue) */
-  --color-primary:              oklch(0.60 0.22 250);
+  --color-primary:              var(--ui-primary);
   --color-primary-foreground:   oklch(0.98 0 0);
+  --color-primary-lite:         var(--ui-primary-lite);
+  --color-primary-dim:          var(--ui-primary-dim);
 
   /* Borders & focus */
   --color-border:               var(--ui-border);
   --color-input:                var(--ui-border);
-  --color-ring:                 oklch(0.60 0.22 250);
+  --color-ring:                 var(--ui-primary);
 
   /* Feedback */
   --color-destructive:          oklch(0.577 0.245 27.325);
