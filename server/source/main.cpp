@@ -7,6 +7,7 @@
 #include "features/get-graph-full/GetGraphFullRoute.h"
 #include "features/patch-close-edge/PatchCloseEdgeRoute.h"
 #include "features/patch-open-edge/PatchOpenEdgeRoute.h"
+#include "features/get-performance/GetPerformanceRoute.h"
 
 int main()
 {
@@ -37,6 +38,7 @@ int main()
   GetGraphFullRoute::setupRoutes(app, storage);
   PatchCloseEdgeRoute::setupRoutes(app, storage);
   PatchOpenEdgeRoute::setupRoutes(app, storage);
+  GetPerformanceRoute::setupRoutes(app, storage);
 
   app.port(4000).multithreaded().run();
 }
