@@ -1,5 +1,5 @@
 import type { Ref } from "vue";
-import type { Bounds, Point, Viewport, Level } from "./zix";
+import type { Bounds, Point, Viewport, Floor } from "./zix";
 import { Viewport as LogicViewport } from "@logic/viewport";
 
 export interface UseViewportReturn {
@@ -21,7 +21,7 @@ export interface UseViewportReturn {
 };
 
 export interface UseLevelsReturn {
-  activeLevel: Ref<Level>;
+  activeLevel: Ref<Floor>;
   setLevel: (id: number) => void;
 };
 

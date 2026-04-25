@@ -8,7 +8,7 @@ export interface Bounds {
   max: Point;
 };
 
-export interface Level {
+export interface Floor {
   id: number;
   label: string;
   imagePath: string;
