@@ -5,6 +5,7 @@ import { laboratoryRoutes } from "@features/laboratory/routes";
 export const router = createRouter({
   history: createWebHistory(),
   routes: [
+    { path: "/", redirect: "/visualizer" },
     ...visualizerRoutes,
     ...laboratoryRoutes,
   ],

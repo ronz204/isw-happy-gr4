@@ -1,9 +1,9 @@
 <script setup lang="ts">
-
+import HappyLayout from "@layouts/HappyLayout.vue";
 </script>
 
 <template>
   <UApp>
-    <RouterView />
+    <HappyLayout />
   </UApp>
 </template>
