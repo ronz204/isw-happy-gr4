@@ -23,8 +23,10 @@
       "@hooks/*": ["./src/core/hooks/*"],
       "@domain/*": ["./src/core/types/*"],
 
+      "@atoms/*": ["./src/shared/atoms/*"],
       "@layouts/*": ["./src/shared/layouts/*"],
       "@molecules/*": ["./src/shared/molecules/*"],
+      "@organisms/*": ["./src/shared/organisms/*"],
       
       "#build/ui/*": ["./node_modules/.nuxt-ui/ui/*"]
     }

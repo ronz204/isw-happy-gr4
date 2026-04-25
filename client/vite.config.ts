@@ -14,5 +14,10 @@ export default defineConfig({
     "@logic": "/src/core/logic",
     "@hooks": "/src/core/hooks",
     "@domain": "/src/core/types",
+
+    "@atoms": "/src/shared/atoms",
+    "@layouts": "/src/shared/layouts",
+    "@molecules": "/src/shared/molecules",
+    "@organisms": "/src/shared/organisms",
   }},
 });
