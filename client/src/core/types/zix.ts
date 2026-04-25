@@ -45,3 +45,12 @@ export interface Transform {
   offsetX: number;
   offsetY: number;
 };
+
+export interface Vector {
+  id: number;
+  floor: number;
+  from: Point;
+  to: Point;
+  color?: string;
+  width?: number;
+};
