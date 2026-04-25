@@ -3,6 +3,7 @@
 #include "SearchStrategy.h"
 #include "algorithms/BFSStrategy.h"
 #include "algorithms/DFSStrategy.h"
+#include "algorithms/DijkstraStrategy.h"
 #include <memory>
 #include <string>
 #include <stdexcept>
@@ -21,6 +22,10 @@ public:
     {
       return std::make_unique<DFSStrategy>();
     }
+    else if (strategyName == "Dijkstra")
+    {
+      return std::make_unique<DijkstraStrategy>();
+    }
     else
     {
       throw std::invalid_argument("Invalid strategy name: " + strategyName);
@@ -30,6 +35,6 @@ public:
   // Check if a strategy name is valid
   static bool isValidStrategy(const std::string &strategyName)
   {
-    return strategyName == "BFS" || strategyName == "DFS";
+    return strategyName == "BFS" || strategyName == "DFS" || strategyName == "Dijkstra";
   }
 };

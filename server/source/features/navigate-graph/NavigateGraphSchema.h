@@ -71,9 +71,9 @@ public:
     }
     
     std::string strategyStr = body["strategy"].s();
-    if (strategyStr != "BFS" && strategyStr != "DFS")
+    if (strategyStr != "BFS" && strategyStr != "DFS" && strategyStr != "Dijkstra")
     {
-      return {false, "Invalid strategy. Valid values: BFS, DFS"};
+      return {false, "Invalid strategy. Valid values: BFS, DFS, Dijkstra"};
     }
     request.strategy = strategyStr;
 
