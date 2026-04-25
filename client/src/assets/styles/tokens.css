@@ -1,0 +1,77 @@
+/* ─────────────────────────────────────────────────────────────────────────
+ * Design Tokens
+ *
+ *  1. :root        — Nuxt UI --ui-* overrides + custom sidebar vars.
+ *  2. @theme       — Literal values (fonts).
+ *  3. @theme inline — Tailwind utilities mapped to --ui-* vars.
+ * ───────────────────────────────────────────────────────────────────────── */
+
+/* ─── 1. Nuxt UI overrides ──────────────────────────────────────────────── */
+:root {
+  /* Backgrounds */
+  --ui-bg:              oklch(0.08 0.006 250);
+  --ui-bg-muted:        oklch(0.13 0.007 250);
+  --ui-bg-elevated:     oklch(0.11 0.007 250);
+  --ui-bg-accented:     oklch(0.19 0.012 250);
+  --ui-bg-inverted:     oklch(0.93 0 0);
+
+  /* Borders */
+  --ui-border:          oklch(0.22 0.007 250);
+  --ui-border-muted:    oklch(0.15 0.005 250);
+  --ui-border-accented: oklch(0.30 0.015 250);
+  --ui-border-inverted: oklch(0.93 0 0);
+
+  /* Text */
+  --ui-text-dimmed:      oklch(0.38 0 0);
+  --ui-text-muted:       oklch(0.52 0 0);
+  --ui-text-toned:       oklch(0.67 0 0);
+  --ui-text:             oklch(0.93 0 0);
+  --ui-text-highlighted: oklch(0.98 0 0);
+  --ui-text-inverted:    oklch(0.08 0 0);
+
+  /* Radius */
+  --ui-radius: 0.5rem;
+
+  /* Sidebar (slightly lighter than bg) */
+  --sidebar-bg:     oklch(0.10 0.008 250);
+  --sidebar-border: oklch(0.20 0.007 250);
+}
+
+/* ─── 2. Tailwind theme variables (literal values) ───────────────────────── */
+@theme {
+  --font-sans: 'Inter', 'Geist', sans-serif;
+  --font-mono: 'Geist Mono', monospace;
+}
+
+/* ─── 3. Tailwind color utilities (mapped to --ui-* via @theme inline) ───── */
+@theme inline {
+  /* Surfaces */
+  --color-background:           var(--ui-bg);
+  --color-card:                 var(--ui-bg-elevated);
+  --color-secondary:            var(--ui-bg-muted);
+  --color-accent:               var(--ui-bg-accented);
+
+  /* Text */
+  --color-foreground:           var(--ui-text);
+  --color-muted-foreground:     var(--ui-text-muted);
+  --color-card-foreground:      var(--ui-text);
+  --color-secondary-foreground: oklch(0.85 0 0);
+  --color-accent-foreground:    var(--ui-text);
+
+  /* Primary (blue) */
+  --color-primary:              oklch(0.60 0.22 250);
+  --color-primary-foreground:   oklch(0.98 0 0);
+
+  /* Borders & focus */
+  --color-border:               var(--ui-border);
+  --color-input:                var(--ui-border);
+  --color-ring:                 oklch(0.60 0.22 250);
+
+  /* Feedback */
+  --color-destructive:          oklch(0.577 0.245 27.325);
+  --color-destructive-foreground: oklch(0.98 0 0);
+
+  /* Sidebar */
+  --color-sidebar:              var(--sidebar-bg);
+  --color-sidebar-border:       var(--sidebar-border);
+}
