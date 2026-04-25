@@ -16,6 +16,7 @@
     "paths": {
       "@api/*": ["./src/api/*"],
       "@assets/*": ["./src/assets/*"],
+      "@features/*": ["./src/features/*"],
       "@shared/*": ["./src/shared/*"],
       
       "#build/ui/*": ["./node_modules/.nuxt-ui/ui/*"]
