@@ -14,6 +14,7 @@ export default defineConfig({
     "@logic": "/src/core/logic",
     "@hooks": "/src/core/hooks",
     "@domain": "/src/core/types",
+    "@stores": "/src/core/stores",
 
     "@atoms": "/src/shared/atoms",
     "@layouts": "/src/shared/layouts",
