@@ -22,6 +22,9 @@
       "@logic/*": ["./src/core/logic/*"],
       "@hooks/*": ["./src/core/hooks/*"],
       "@domain/*": ["./src/core/types/*"],
+
+      "@layouts/*": ["./src/shared/layouts/*"],
+      "@molecules/*": ["./src/shared/molecules/*"],
       
       "#build/ui/*": ["./node_modules/.nuxt-ui/ui/*"]
     }
