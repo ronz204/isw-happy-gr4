@@ -14,5 +14,10 @@ watch(() => props.bounds, (b) => { viewport?.setBounds(b) }, { immediate: true }
 </script>
 
 <template>
-  <img :src="imagePath" class="block pointer-events-none" />
+  <img
+    :src="imagePath"
+    :width="bounds.max.x - bounds.min.x"
+    :height="bounds.max.y - bounds.min.y"
+    class="block pointer-events-none"
+  />
 </template>

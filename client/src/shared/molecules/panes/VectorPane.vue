@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { storeToRefs } from "pinia";
 import { useMapStore } from "@stores/useMapStore";
+import { useGetNodesByFloor } from "@providers/useGetNodesByFloor";
 import VectorAtom from "@atoms/Vector.vue";
 
 const store = useMapStore();
+const { currentFloorId } = storeToRefs(store);
+const { vectors } = useGetNodesByFloor(currentFloorId);
 
 const viewBox = computed(() => {
   const b = store.currentFloor.bounds;
@@ -24,6 +28,6 @@ const svgHeight = computed(() => {
 <template>
   <svg class="absolute top-0 left-0 pointer-events-none overflow-visible" :viewBox="viewBox" :width="svgWidth"
     :height="svgHeight" style="z-index: 2">
-    <VectorAtom v-for="vector in store.currentVectors" :key="vector.id" :vector="vector" />
+    <VectorAtom v-for="vector in vectors" :key="vector.id" :vector="vector" />
   </svg>
 </template>
