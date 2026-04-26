@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import { visualizerRoutes } from "@features/visualizer/routes";
 import { laboratoryRoutes } from "@features/laboratory/routes";
+import { blockingRoutes } from "@features/blocking/routes";
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -8,5 +9,6 @@ export const router = createRouter({
     { path: "/", redirect: "/visualizer" },
     ...visualizerRoutes,
     ...laboratoryRoutes,
+    ...blockingRoutes,
   ],
 });

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Building2, MapPin, FlaskConical, PanelLeftClose, PanelLeftOpen } from "@lucide/vue";
+import { Building2, MapPin, FlaskConical, ShieldBan, PanelLeftClose, PanelLeftOpen } from "@lucide/vue";
 import { useRoute } from "vue-router";
 
 const props = defineProps<{
@@ -15,6 +15,7 @@ const route = useRoute();
 const navItems = [
   { name: "Visualizer", path: "/visualizer", icon: MapPin, label: "Visualizador" },
   { name: "Laboratory", path: "/laboratory", icon: FlaskConical, label: "Laboratorio" },
+  { name: "Blocking", path: "/blocking", icon: ShieldBan, label: "Bloqueo" },
 ];
 
 function isActive(path: string) {
