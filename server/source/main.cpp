@@ -8,6 +8,7 @@
 #include "features/patch-close-edge/PatchCloseEdgeRoute.h"
 #include "features/patch-open-edge/PatchOpenEdgeRoute.h"
 #include "features/get-performance/GetPerformanceRoute.h"
+#include "features/search-edges/SearchEdgesRoute.h"
 
 int main()
 {
@@ -39,6 +40,7 @@ int main()
   PatchCloseEdgeRoute::setupRoutes(app, storage);
   PatchOpenEdgeRoute::setupRoutes(app, storage);
   GetPerformanceRoute::setupRoutes(app, storage);
+  SearchEdgesRoute::setupRoutes(app, storage);
 
   app.port(4000).multithreaded().run();
 }

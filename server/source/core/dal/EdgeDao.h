@@ -27,6 +27,17 @@ public:
     return storage.get_all<Edge>(sql::where(sql::c(&Edge::floor) == floor));
   }
 
+  std::vector<Edge> findByNodes(int fromNodeId, int toNodeId)
+  {
+    return storage.get_all<Edge>(
+      sql::where(
+        (sql::c(&Edge::fromNodeId) == fromNodeId and sql::c(&Edge::toNodeId) == toNodeId)
+        or
+        (sql::c(&Edge::fromNodeId) == toNodeId and sql::c(&Edge::toNodeId) == fromNodeId)
+      )
+    );
+  }
+
   void update(const Edge &edge)
   {
     storage.update(edge);
