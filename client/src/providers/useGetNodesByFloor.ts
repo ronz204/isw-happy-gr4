@@ -26,7 +26,7 @@ export function useGetNodesByFloor(floorId: Ref<number>) {
     );
 
     return (query.data.value?.edges ?? [])
-      .filter((e) => e.status === "Open")
+      .filter((e) => e.type !== "Vertical")
       .reduce<Vector[]>((acc, edge) => {
         const from = nodeMap.get(edge.fromNodeId);
         const to = nodeMap.get(edge.toNodeId);
@@ -36,6 +36,7 @@ export function useGetNodesByFloor(floorId: Ref<number>) {
             floor: edge.floor,
             from: { x: from.px, y: from.py },
             to: { x: to.px, y: to.py },
+            color: edge.status === "Closed" ? "#ef4444" : undefined,
           });
         }
         return acc;
