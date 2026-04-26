@@ -8,8 +8,9 @@ export default defineConfig({
   resolve: { alias: {
     "@api": "/src/api",
     "@assets": "/src/assets",
-    "@features": "/src/features",
     "@shared": "/src/shared",
+    "@features": "/src/features",
+    "@providers": "/src/providers",
 
     "@logic": "/src/core/logic",
     "@hooks": "/src/core/hooks",
