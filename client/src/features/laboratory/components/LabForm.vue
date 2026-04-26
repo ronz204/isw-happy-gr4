@@ -4,6 +4,10 @@ import { ref } from "vue";
 import { ArrowRight, FlaskConical } from "@lucide/vue";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import type { PerformanceRequest } from "@api/perform.models";
+import { useGetLandmarks } from "@providers/useGetLandmarks";
+import SelectAtom from "@atoms/Select.vue";
+
+const { options: landmarkOptions } = useGetLandmarks();
 
 const PROFILES = [
   { label: "Regular", value: "Regular" },
@@ -39,8 +43,12 @@ function onSubmit(event: FormSubmitEvent<Schema>) {
     <!-- Node inputs -->
     <div class="flex items-start gap-3 mb-4">
       <UFormField label="Nodo origen" name="startNodeId" required class="flex-1">
-        <UInput v-model.number="state.startNodeId" type="number" placeholder="ID nodo origen" :disabled="props.loading"
-          class="w-full" />
+        <SelectAtom
+          v-model="state.startNodeId"
+          :options="landmarkOptions"
+          placeholder="Selecciona origen"
+          :disabled="props.loading"
+        />
       </UFormField>
 
       <div class="flex items-center justify-center shrink-0 mt-6.5 w-7 h-9 text-muted-foreground">
@@ -48,8 +56,12 @@ function onSubmit(event: FormSubmitEvent<Schema>) {
       </div>
 
       <UFormField label="Nodo destino" name="endNodeId" required class="flex-1">
-        <UInput v-model.number="state.endNodeId" type="number" placeholder="ID nodo destino" :disabled="props.loading"
-          class="w-full" />
+        <SelectAtom
+          v-model="state.endNodeId"
+          :options="landmarkOptions"
+          placeholder="Selecciona destino"
+          :disabled="props.loading"
+        />
       </UFormField>
     </div>
 

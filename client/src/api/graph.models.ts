@@ -23,3 +23,7 @@ export interface FloorGraphResponse {
   nodes: ApiNode[];
   edges: ApiEdge[];
 }
+
+export interface LandmarksResponse {
+  landmarks: ApiNode[];
+}
