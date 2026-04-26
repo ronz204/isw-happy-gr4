@@ -37,4 +37,4 @@ INSERT INTO nodes (type, floor, px, py, code, label, isLandmark) VALUES
 (0, 5, 1174.0, 394.0, 'WP-F5-36', '', 0),
 
 -- Waypoints - Eje Horizontal, Centro de Pasillo (1 punto)
-(0, 5, 930.0, 394.0, 'WP-F5-37', '', 0),
+(0, 5, 930.0, 394.0, 'WP-F5-37', '', 0);

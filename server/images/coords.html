@@ -7,12 +7,17 @@
         #canvas-container { position: relative; display: inline-block; border: 2px solid #555; }
         img { display: block; cursor: crosshair; }
         #info { margin-top: 10px; font-size: 20px; font-weight: bold; color: #00ff00; }
+        select { margin: 10px; padding: 6px 12px; font-size: 16px; }
     </style>
 </head>
 <body>
     <p>Haz clic en la imagen para obtener coordenadas fijas</p>
+    <select id="floorSelect" onchange="changeFloor()">
+        <option value="eco-campus-f4.svg">Piso 4</option>
+        <option value="eco-campus-f5.svg">Piso 5</option>
+    </select>
     <div id="canvas-container">
-        <img src="eco-campus-f5-nodes.png" id="miImagen">
+        <img src="eco-campus-f4.svg" id="miImagen" width="700" height="450">
     </div>
     <div id="info">Coordenadas: - , -</div>
 
@@ -20,20 +25,23 @@
         const img = document.getElementById('miImagen');
         const info = document.getElementById('info');
 
+        function changeFloor() {
+            const sel = document.getElementById('floorSelect');
+            img.src = sel.value;
+        }
+
         img.addEventListener('click', function(e) {
-            // Esto obtiene la posición relativa al tamaño visual de la imagen
             const rect = img.getBoundingClientRect();
-            
-            // Calculamos el factor de escala en caso de que el navegador la esté estirando
-            const escalaX = img.naturalWidth / rect.width;
-            const escalaY = img.naturalHeight / rect.height;
 
-            // Coordenadas reales del píxel en el archivo original
-            const x = Math.round((e.clientX - rect.left) * escalaX);
-            const y = Math.round((e.clientY - rect.top) * escalaY);
+            // SVG intrinsic size is 700x450, map click to that space
+            const scaleX = 700 / rect.width;
+            const scaleY = 450 / rect.height;
 
-            info.innerText = `X: ${x}, Y: ${y} (Píxeles reales)`;
-            console.log(`Click en: ${x}, ${y}`);
+            const x = Math.round((e.clientX - rect.left) * scaleX);
+            const y = Math.round((e.clientY - rect.top) * scaleY);
+
+            info.innerText = `X: ${x}, Y: ${y}`;
+            console.log(`${x}, ${y}`);
         });
     </script>
 </body>
