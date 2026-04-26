@@ -1,45 +1,69 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { Search, ShieldBan, ShieldCheck, ArrowRight, Route, Layers, Weight } from "@lucide/vue";
-import BlockForm from "../components/BlockForm.vue";
-import { useSearchEdge } from "@providers/useSearchEdge";
+import { useQueryClient } from "@tanstack/vue-query";
+import type { ApiEdge, ApiNode } from "@api/graph.models";
+import { useGetNodesByFloor } from "@providers/useGetNodesByFloor";
+import { ShieldBan, ShieldCheck, ArrowRight, Route } from "@lucide/vue";
 import { usePatchCloseEdge, usePatchOpenEdge } from "@providers/usePatchEdgeStatus";
 
-const searchMutation = useSearchEdge();
+const FLOORS = [
+  { id: 2, label: "P2" },
+  { id: 4, label: "P4" },
+  { id: 5, label: "P5" },
+];
+
+const queryClient = useQueryClient();
+const floorId = ref<number>(4);
+const showOnlyClosed = ref(false);
+const pendingEdgeId = ref<number | null>(null);
+
+const { data, isFetching } = useGetNodesByFloor(floorId);
 const closeEdgeMutation = usePatchCloseEdge();
 const openEdgeMutation = usePatchOpenEdge();
 
-const lastSearchParams = ref<{ fromNodeId: number; toNodeId: number } | null>(null);
-
-const edge = computed(() => searchMutation.data.value?.edge ?? null);
-const found = computed(() => searchMutation.data.value?.found ?? false);
-
-const isLoading = computed(
-  () =>
-    searchMutation.isPending.value ||
-    closeEdgeMutation.isPending.value ||
-    openEdgeMutation.isPending.value
-);
-
-const canClose = computed(() => found.value && edge.value?.status === "Open");
-const canOpen = computed(() => found.value && edge.value?.status === "Closed");
-
-function onSearch(data: { fromNodeId: number; toNodeId: number }) {
-  lastSearchParams.value = data;
-  searchMutation.mutate(data);
+interface EnrichedEdge extends ApiEdge {
+  fromCode: string;
+  toCode: string;
 }
 
-function onClose() {
-  if (!edge.value) return;
-  closeEdgeMutation.mutate(edge.value.id, {
-    onSuccess: () => lastSearchParams.value && searchMutation.mutate(lastSearchParams.value),
+const enrichedEdges = computed<EnrichedEdge[]>(() => {
+  const nodeMap = new Map<number, ApiNode>(
+    (data.value?.nodes ?? []).map((n) => [n.id, n])
+  );
+
+  return (data.value?.edges ?? [])
+    .filter((e) => e.type !== "Vertical")
+    .filter((e) => !showOnlyClosed.value || e.status === "Closed")
+    .map((e) => ({
+      ...e,
+      fromCode: nodeMap.get(e.fromNodeId)?.code ?? String(e.fromNodeId),
+      toCode: nodeMap.get(e.toNodeId)?.code ?? String(e.toNodeId),
+    }));
+});
+
+const closedCount = computed(
+  () => (data.value?.edges ?? []).filter((e) => e.status === "Closed" && e.type !== "Vertical").length
+);
+
+function onClose(edgeId: number) {
+  pendingEdgeId.value = edgeId;
+  closeEdgeMutation.mutate(edgeId, {
+    onSuccess: () => {
+      pendingEdgeId.value = null;
+      queryClient.invalidateQueries({ queryKey: ["floor", floorId.value] });
+    },
+    onError: () => { pendingEdgeId.value = null; },
   });
 }
 
-function onOpen() {
-  if (!edge.value) return;
-  openEdgeMutation.mutate(edge.value.id, {
-    onSuccess: () => lastSearchParams.value && searchMutation.mutate(lastSearchParams.value),
+function onOpen(edgeId: number) {
+  pendingEdgeId.value = edgeId;
+  openEdgeMutation.mutate(edgeId, {
+    onSuccess: () => {
+      pendingEdgeId.value = null;
+      queryClient.invalidateQueries({ queryKey: ["floor", floorId.value] });
+    },
+    onError: () => { pendingEdgeId.value = null; },
   });
 }
 </script>
@@ -51,178 +75,93 @@ function onOpen() {
       <!-- Header -->
       <div class="flex items-start gap-4 mb-8">
         <div
-          class="flex items-center justify-center w-11 h-11 rounded-xl shrink-0 mt-0.5"
-          :class="found && edge
-            ? edge.status === 'Open' ? 'bg-green-500/12 text-green-400' : 'bg-red-500/12 text-red-400'
-            : 'bg-primary/12 text-primary-lite'"
-        >
+          class="flex items-center justify-center w-11 h-11 rounded-xl shrink-0 mt-0.5 bg-primary/12 text-primary-lite">
           <ShieldBan :size="20" />
         </div>
         <div class="flex-1 min-w-0">
           <h1 class="text-xl font-bold text-foreground leading-tight">Bloqueo de Edges</h1>
           <p class="text-sm text-muted-foreground mt-1">
-            Busca un edge por sus nodos para cambiar su estado de acceso.
+            Selecciona un piso para ver y gestionar el estado de sus edges.
           </p>
         </div>
-        <!-- Status pill when result is loaded -->
         <Transition name="fade">
-          <UBadge
-            v-if="found && edge"
-            :color="edge.status === 'Open' ? 'success' : 'error'"
-            variant="subtle"
-            size="md"
-            class="shrink-0 mt-1"
-          >
-            {{ edge.status === "Open" ? "Abierto" : "Bloqueado" }}
+          <UBadge v-if="closedCount > 0" color="error" variant="subtle" size="md" class="shrink-0 mt-1">
+            {{ closedCount }} bloqueado{{ closedCount !== 1 ? 's' : '' }}
           </UBadge>
         </Transition>
       </div>
 
-      <!-- Search card -->
-      <UCard class="mb-5">
-        <template #header>
-          <div class="flex items-center gap-2">
-            <Search :size="14" class="text-muted-foreground" />
-            <span class="text-sm font-semibold text-foreground">Buscar Edge</span>
-          </div>
-        </template>
-        <BlockForm :loading="isLoading" @submit="onSearch" />
-      </UCard>
+      <!-- Floor selector + filter -->
+      <div class="flex items-center justify-between gap-4 mb-5">
+        <div class="flex gap-2">
+          <button v-for="floor in FLOORS" :key="floor.id" type="button"
+            class="px-4 py-1.5 rounded-lg text-sm font-medium border transition-all"
+            :class="floorId === floor.id
+              ? 'bg-primary/15 border-primary/40 text-primary-lite'
+              : 'bg-(--ui-bg-elevated) border-(--ui-border) text-muted-foreground hover:text-foreground hover:border-accented'" @click="floorId = floor.id">
+            {{ floor.label }}
+          </button>
+        </div>
 
-      <!-- Error state -->
+        <label class="flex items-center gap-2 cursor-pointer select-none">
+          <UCheckbox v-model="showOnlyClosed" />
+          <span class="text-xs text-muted-foreground">Solo bloqueadas</span>
+        </label>
+      </div>
+
+      <!-- Loading skeleton -->
+      <div v-if="isFetching" class="space-y-2">
+        <div v-for="i in 6" :key="i" class="h-14 rounded-xl animate-pulse" style="background: var(--ui-bg-elevated)" />
+      </div>
+
+      <!-- Empty state -->
       <Transition name="fade">
-        <UAlert
-          v-if="searchMutation.isError.value"
-          color="error"
-          variant="soft"
-          title="Error al buscar"
-          :description="(searchMutation.error.value as any)?.message ?? 'No se pudo conectar con el servidor'"
-          class="mb-5"
-        />
+        <div v-if="!isFetching && enrichedEdges.length === 0" class="flex flex-col items-center py-16 gap-3">
+          <div class="flex items-center justify-center w-12 h-12 rounded-full bg-(--ui-bg-accented)">
+            <Route :size="20" class="text-muted-foreground" />
+          </div>
+          <p class="text-sm font-semibold text-foreground">Sin edges</p>
+          <p class="text-xs text-muted-foreground">
+            {{ showOnlyClosed ? 'No hay edges bloqueadas en este piso.' : 'Este piso no tiene edges registradas.' }}
+          </p>
+        </div>
       </Transition>
 
-      <!-- Not found state -->
+      <!-- Edge list -->
       <Transition name="fade">
-        <UCard v-if="searchMutation.isSuccess.value && !found" class="mb-5">
-          <div class="flex flex-col items-center py-10 gap-3">
-            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-(--ui-bg-accented)">
-              <Search :size="20" class="text-muted-foreground" />
-            </div>
-            <div class="text-center">
-              <p class="text-sm font-semibold text-foreground">Sin resultados</p>
-              <p class="text-xs text-muted-foreground mt-0.5">No existe un edge con esos nodos.</p>
-            </div>
-          </div>
-        </UCard>
-      </Transition>
-
-      <!-- Result card -->
-      <Transition name="fade">
-        <UCard v-if="found && edge">
-          <template #header>
-            <div class="flex items-center gap-2">
-              <Route :size="14" class="text-muted-foreground" />
-              <span class="text-sm font-semibold text-foreground">Edge #{{ edge.id }}</span>
-            </div>
-          </template>
-
-          <!-- Node route row -->
-          <div
-            class="flex items-center gap-3 px-4 py-3 rounded-xl mb-5 font-mono text-sm"
-            style="background: var(--ui-bg-elevated); border: 1px solid var(--ui-border)"
-          >
-            <div class="flex flex-col items-center gap-0.5">
-              <span class="text-[10px] font-sans uppercase tracking-wide text-muted-foreground">Origen</span>
-              <span class="font-bold text-foreground text-base">{{ edge.fromNodeId }}</span>
-            </div>
-            <div class="flex-1 flex items-center gap-1">
-              <div class="flex-1 h-px" style="background: var(--ui-border-accented)"></div>
-              <ArrowRight :size="14" class="text-muted-foreground shrink-0" />
-              <div class="flex-1 h-px" style="background: var(--ui-border-accented)"></div>
-            </div>
-            <div class="flex flex-col items-center gap-0.5">
-              <span class="text-[10px] font-sans uppercase tracking-wide text-muted-foreground">Destino</span>
-              <span class="font-bold text-foreground text-base">{{ edge.toNodeId }}</span>
-            </div>
-          </div>
-
-          <!-- Metadata grid -->
-          <div class="grid grid-cols-3 gap-3 mb-6">
-            <div
-              class="flex flex-col gap-1.5 px-4 py-3 rounded-xl"
-              style="background: var(--ui-bg-elevated); border: 1px solid var(--ui-border)"
-            >
-              <div class="flex items-center gap-1.5 text-muted-foreground">
-                <Route :size="12" />
-                <span class="text-[10px] uppercase tracking-wide font-medium">Tipo</span>
-              </div>
-              <p class="text-sm font-semibold text-foreground">{{ edge.type }}</p>
+        <div v-if="!isFetching && enrichedEdges.length > 0" class="space-y-2">
+          <div v-for="edge in enrichedEdges" :key="edge.id"
+            class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors"
+            style="background: var(--ui-bg-elevated); border: 1px solid var(--ui-border)">
+            <!-- Route label -->
+            <div class="flex items-center gap-1.5 flex-1 min-w-0 font-mono text-xs">
+              <span class="text-foreground font-semibold truncate">{{ edge.fromCode }}</span>
+              <ArrowRight :size="12" class="text-muted-foreground shrink-0" />
+              <span class="text-foreground font-semibold truncate">{{ edge.toCode }}</span>
             </div>
 
-            <div
-              class="flex flex-col gap-1.5 px-4 py-3 rounded-xl"
-              style="background: var(--ui-bg-elevated); border: 1px solid var(--ui-border)"
-            >
-              <div class="flex items-center gap-1.5 text-muted-foreground">
-                <Layers :size="12" />
-                <span class="text-[10px] uppercase tracking-wide font-medium">Piso</span>
-              </div>
-              <p class="text-sm font-semibold text-foreground">{{ edge.floor }}</p>
-            </div>
-
-            <div
-              class="flex flex-col gap-1.5 px-4 py-3 rounded-xl"
-              style="background: var(--ui-bg-elevated); border: 1px solid var(--ui-border)"
-            >
-              <div class="flex items-center gap-1.5 text-muted-foreground">
-                <Weight :size="12" />
-                <span class="text-[10px] uppercase tracking-wide font-medium">Peso</span>
-              </div>
-              <p class="text-sm font-semibold text-foreground">{{ edge.weight.toFixed(2) }}</p>
-            </div>
-          </div>
-
-          <!-- Status + Actions -->
-          <div
-            class="flex items-center justify-between gap-3 pt-4"
-            style="border-top: 1px solid var(--ui-border)"
-          >
-            <div class="flex items-center gap-2">
-              <div
-                class="w-2 h-2 rounded-full"
-                :class="edge.status === 'Open' ? 'bg-green-400' : 'bg-red-400'"
-              />
-              <span class="text-xs text-muted-foreground">
-                {{ edge.status === "Open" ? "Este edge permite tránsito" : "Este edge está bloqueado al tránsito" }}
+            <!-- Status dot -->
+            <div class="flex items-center gap-1.5 shrink-0">
+              <div class="w-1.5 h-1.5 rounded-full shrink-0"
+                :class="edge.status === 'Open' ? 'bg-green-400' : 'bg-red-400'" />
+              <span class="text-xs text-muted-foreground w-16">
+                {{ edge.status === 'Open' ? 'Abierto' : 'Bloqueado' }}
               </span>
             </div>
 
-            <div class="flex gap-2">
-              <UButton
-                v-if="canClose"
-                color="error"
-                variant="soft"
-                :loading="closeEdgeMutation.isPending.value"
-                :disabled="isLoading"
-                @click="onClose"
-              >
-                <ShieldBan :size="14" />
-                Bloquear
-              </UButton>
-              <UButton
-                v-if="canOpen"
-                color="success"
-                variant="soft"
-                :loading="openEdgeMutation.isPending.value"
-                :disabled="isLoading"
-                @click="onOpen"
-              >
-                <ShieldCheck :size="14" />
-                Abrir
-              </UButton>
-            </div>
+            <!-- Action button -->
+            <UButton v-if="edge.status === 'Open'" color="error" variant="ghost" size="xs"
+              :loading="pendingEdgeId === edge.id" :disabled="pendingEdgeId !== null" @click="onClose(edge.id)">
+              <ShieldBan :size="13" />
+              Bloquear
+            </UButton>
+            <UButton v-else color="success" variant="ghost" size="xs" :loading="pendingEdgeId === edge.id"
+              :disabled="pendingEdgeId !== null" @click="onOpen(edge.id)">
+              <ShieldCheck :size="13" />
+              Abrir
+            </UButton>
           </div>
-        </UCard>
+        </div>
       </Transition>
 
     </div>
@@ -232,11 +171,12 @@ function onOpen() {
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  transition: opacity 0.15s ease, transform 0.15s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-  transform: translateY(6px);
+  transform: translateY(4px);
 }
 </style>
