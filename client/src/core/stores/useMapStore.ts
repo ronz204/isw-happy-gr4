@@ -4,6 +4,12 @@ import type { Floor } from "@domain/zix";
 
 const FLOORS: Floor[] = [
   {
+    id: 1,
+    label: "P1",
+    imagePath: "/src/assets/images/eco-campus-f1.svg",
+    bounds: { min: { x: 0, y: 0 }, max: { x: 700, y: 450 } },
+  },
+  {
     id: 2,
     label: "P2",
     imagePath: "/src/assets/images/eco-campus-f2.svg",
