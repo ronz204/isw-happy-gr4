@@ -11,10 +11,11 @@ struct PathNode
   float px;
   float py;
   int type;
+  int floor;
 
-  PathNode() : code(""), px(0.0f), py(0.0f), type(0) {}
-  PathNode(const std::string &code, float px, float py, int type)
-      : code(code), px(px), py(py), type(type) {}
+  PathNode() : code(""), px(0.0f), py(0.0f), type(0), floor(0) {}
+  PathNode(const std::string &code, float px, float py, int type, int floor)
+      : code(code), px(px), py(py), type(type), floor(floor) {}
 };
 
 struct SearchResponse
@@ -38,7 +39,7 @@ struct SearchResponse
       const Node *node = graph.getNode(nodeId);
       if (node)
       {
-        pathNodes.emplace_back(node->code, node->px, node->py, node->type);
+        pathNodes.emplace_back(node->code, node->px, node->py, node->type, node->floor);
       }
     }
 

@@ -28,6 +28,7 @@ public:
         pathArray[i]["px"] = pathNode.px;
         pathArray[i]["py"] = pathNode.py;
         pathArray[i]["type"] = toString(static_cast<NodeType>(pathNode.type));
+        pathArray[i]["floor"] = pathNode.floor;
       }
     }
     else
