@@ -31,8 +31,10 @@ const enrichedEdges = computed<EnrichedEdge[]>(() => {
     (data.value?.nodes ?? []).map((n) => [n.id, n])
   );
 
+  const HIDDEN_TYPES = new Set(["Stairs", "Elevator"]);
+
   return (data.value?.edges ?? [])
-    .filter((e) => e.type !== "Vertical")
+    .filter((e) => !HIDDEN_TYPES.has(e.type))
     .filter((e) => !showOnlyClosed.value || e.status === "Closed")
     .map((e) => ({
       ...e,
@@ -42,7 +44,10 @@ const enrichedEdges = computed<EnrichedEdge[]>(() => {
 });
 
 const closedCount = computed(
-  () => (data.value?.edges ?? []).filter((e) => e.status === "Closed" && e.type !== "Vertical").length
+  () => {
+    const HIDDEN_TYPES = new Set(["Stairs", "Elevator"]);
+    return (data.value?.edges ?? []).filter((e) => e.status === "Closed" && !HIDDEN_TYPES.has(e.type)).length;
+  }
 );
 
 function onClose(edgeId: number) {

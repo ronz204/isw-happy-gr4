@@ -25,8 +25,10 @@ export function useGetNodesByFloor(floorId: Ref<number>) {
       (query.data.value?.nodes ?? []).map((n) => [n.id, n])
     );
 
+    const HIDDEN_TYPES = new Set(["Stairs", "Elevator"]);
+
     return (query.data.value?.edges ?? [])
-      .filter((e) => e.type !== "Vertical")
+      .filter((e) => !HIDDEN_TYPES.has(e.type))
       .reduce<Vector[]>((acc, edge) => {
         const from = nodeMap.get(edge.fromNodeId);
         const to = nodeMap.get(edge.toNodeId);
