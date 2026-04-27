@@ -3,7 +3,7 @@ INSERT INTO nodes (type, floor, px, py, code, label, isLandmark) VALUES
 (6, 5, 497.0, 220.0, 'BATH-F5', 'Baños', 1),
 
 -- Zona Chilling (Amarillo)
-(7, 5, 474.0, 187.0, 'CHILL-F5', 'Zona Chilling', 1),
+(7, 5, 474.0, 187.0, 'CHILL-F5', 'Zona Libre F5', 1),
 
 -- Aulas 316 a 318 (Rojo)
 (1, 5, 369.0, 247.0, 'R-324-F5', 'Aula 324', 1),
