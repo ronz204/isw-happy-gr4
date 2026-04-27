@@ -15,6 +15,7 @@ export function useGetNodesByFloor(floorId: Ref<number>) {
       id: node.id,
       data: node,
       label: node.label || node.code,
+      code: node.code,
       floor: node.floor,
       position: { x: node.px, y: node.py },
     }))

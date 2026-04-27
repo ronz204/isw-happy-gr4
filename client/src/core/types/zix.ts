@@ -24,6 +24,7 @@ export interface Marker<Data> {
   id: number;
   data: Data;
   label: string;
+  code: string;
   floor: number;
   position: Point;
 };
