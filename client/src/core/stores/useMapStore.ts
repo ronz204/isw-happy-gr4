@@ -10,6 +10,12 @@ const FLOORS: Floor[] = [
     bounds: { min: { x: 0, y: 0 }, max: { x: 700, y: 450 } },
   },
   {
+    id: 3,
+    label: "P3",
+    imagePath: "/src/assets/images/eco-campus-f3.svg",
+    bounds: { min: { x: 0, y: 0 }, max: { x: 700, y: 450 } },
+  },
+  {
     id: 4,
     label: "P4",
     imagePath: "/src/assets/images/eco-campus-f4.svg",
