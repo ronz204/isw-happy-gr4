@@ -10,7 +10,14 @@ WITH raw_connections(c1, c2) AS (
 
   /* --- Vertical, Stairs F3-F2 --- */
   SELECT 'ST-L1-DOWN-F2', 'ST-L1-UP-F3' UNION ALL
-  SELECT 'ST-R1-DOWN-F2', 'ST-R1-UP-F3'
+  SELECT 'ST-R1-DOWN-F2', 'ST-R1-UP-F3' UNION ALL
+
+  /* --- Vertical, Stairs F2-F1 --- */
+  SELECT 'ST-L2-DOWN-F1', 'ST-L1-UP-F2' UNION ALL
+  SELECT 'ST-R2-DOWN-F1', 'ST-R1-UP-F2' UNION ALL
+
+  /* --- Vertical, Stairs Comedor - Biblioteca --- */
+  SELECT 'ST-LIB-F1', 'ST-CAF-F4'
 )
 SELECT 1, 0, 1, 5.0, n1.id, n2.id
 FROM raw_connections
@@ -27,7 +34,13 @@ WITH raw_connections(c1, c2) AS (
   SELECT 'EL-EDI-F4', 'EL-EDI-F3' UNION ALL
 
   /* --- Vertical, Elevator F3-F2 --- */
-  SELECT 'EL-EDI-F3', 'EL-EDI-F2'
+  SELECT 'EL-EDI-F3', 'EL-EDI-F2' UNION ALL
+
+  /* --- Vertical, Elevator F2-F1 --- */
+  SELECT 'EL-EDI-F2', 'EL-EDI-F1' UNION ALL
+
+  /* --- Vertical, Elevator Comedor - Biblioteca --- */
+  SELECT 'EL-CAF-F4', 'EL-LIB-F1'
 )
 SELECT 2, 0, 1, 2.0, n1.id, n2.id
 FROM raw_connections
