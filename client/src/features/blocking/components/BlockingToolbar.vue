@@ -2,7 +2,9 @@
 import { Search } from "@lucide/vue";
 
 const FLOORS = [
+  { id: 1, label: "P1" },
   { id: 2, label: "P2" },
+  { id: 3, label: "P3" },
   { id: 4, label: "P4" },
   { id: 5, label: "P5" },
 ];
